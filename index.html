@@ -4,35 +4,35 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>InScopeI1 – Language Exchange @ USYD</title>
-  <meta name="description" content="InScopeI1 – A friendly, student-led language exchange community at USYD. Join sessions and explore resources." />
+  <meta name="description" content="InScopeI1 – A friendly, student-led bilingual language exchange community at USYD (中英双语语言交流社区)。" />
   <link rel="icon" href="/favicon.ico" />
   <style>
     :root{
-      /* 高饱和蓝主题 */
+      /* Theme */
       --brand-800:#1230FF;
       --brand-700:#1E3AFF;
       --brand-600:#2F5BFF;
       --brand-500:#4D78FF;
       --brand-300:#AECBFF;
       --accent:#FFC83D;
-      --ink:#0F172A;       /* 深色文本（白底上用） */
-      --muted:#475569;     /* 次要文本（白底上用） */
-      --bg:#1E3AFF;        /* 蓝色页面背景 */
+      --ink:#0F172A;
+      --muted:#475569;
+      --bg:#1E3AFF;              /* page hero background */
       --card:#FFFFFF;
       --radius:16px;
       --shadow:0 10px 24px rgba(16,24,40,.12);
-      --on-blue:#F7FAFF;   /* 蓝底上的主文本 */
-      --on-blue-sub:#E4EDFF; /* 蓝底上的次文本 */
-      --on-blue-link:#FFEB99; /* 蓝底上链接/强调 */
+      --on-blue:#F7FAFF;
+      --on-blue-sub:#E4EDFF;
+      --on-blue-link:#FFEB99;
     }
 
     html{scroll-behavior:smooth}
     *{box-sizing:border-box}
 
-    /* 整体背景：蓝色+渐变；默认文字在蓝底上为浅色 */
+    /* Page background: gradient blues */
     body{
       margin:0;
-      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Apple Color Emoji", "Segoe UI Emoji";
       color:var(--on-blue);
       background:var(--bg);
       background-image:
@@ -43,71 +43,73 @@
     img{max-width:100%;display:block}
     .container{max-width:1100px;margin:0 auto;padding:0 20px}
 
-    /* 顶部导航（蓝底上） */
-    .nav{position:sticky;top:0;z-index:50;background:rgba(6,18,120,.22);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid rgba(255,255,255,.18)}
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{height:36px;width:auto}
+    /* ===== NAV: full white bar (要求：左上角栏为白色，不突兀) ===== */
+    .nav{position:sticky;top:0;z-index:50;background:#ffffff;border-bottom:1px solid #e5e7eb}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+
+    /* Logo block bigger + white background plate (要求：logo更大、背景白) */
+    .brand-plate{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;box-shadow:var(--shadow)}
+    .brand-plate img{height:44px;width:auto} /* bigger small logo */
+    .brand-plate .brand-text{font-weight:900;color:#0b1b4a}
+
     .menu{display:flex;gap:18px;align-items:center}
-    .menu a{font-weight:600;color:#F3F7FF}
-    .menu a:hover{opacity:.9}
-    .cta{background:var(--accent);color:#1b1600;font-weight:800;padding:10px 14px;border-radius:999px;border:2px solid #ffd66f;box-shadow:var(--shadow)}
-    .hamburger{display:none;background:none;border:none;font-size:22px;color:#fff}
+    .menu a{font-weight:700;color:#0f172a}
+    .menu a:hover{opacity:.85}
+    .cta{background:var(--brand-700);color:#fff;font-weight:800;padding:10px 14px;border-radius:999px;border:2px solid #dbe6ff;box-shadow:var(--shadow)}
+    .hamburger{display:none;background:none;border:none;font-size:22px;color:#0f172a}
 
     @media (max-width:850px){
       .menu{display:none}
       .hamburger{display:block}
-      .mobile-menu{display:none;position:absolute;left:0;right:0;top:60px;background:rgba(20,35,255,.96);border-bottom:1px solid rgba(255,255,255,.25)}
-      .mobile-menu a{display:block;padding:14px 20px;border-top:1px solid rgba(255,255,255,.18);color:#fff}
+      .mobile-menu{display:none;position:absolute;left:0;right:0;top:66px;background:#ffffff;border-bottom:1px solid #e5e7eb}
+      .mobile-menu a{display:block;padding:14px 20px;border-top:1px solid #f1f5f9;color:#0f172a}
     }
 
-    /* 白色内容容器（白底上全部改用深色文本） */
-    .surface{
-      background:var(--card);
-      color:var(--ink);
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:28px;
-    }
-    /* 白底里的标题/段落/次要文字统一颜色 */
-    .surface h1,.surface h2,.surface h3,.surface h4,.surface h5,
-    .surface p,.surface li,.surface .card{color:var(--ink)}
+    /* Surfaces (white cards) */
+    .surface{background:var(--card);color:var(--ink);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
+    .surface h1,.surface h2,.surface h3,.surface h4,.surface h5,.surface p,.surface li,.surface .card{color:var(--ink)}
     .surface .section-sub,.surface .meta{color:var(--muted)}
     .surface a{color:#1f4fff}
 
-    /* HERO（蓝底） */
+    /* ===== HERO ===== */
     .hero{position:relative;overflow:hidden}
     .hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;padding:68px 0}
-    h1{font-size:42px;line-height:1.1;margin:14px 0 12px;color:var(--on-blue)}
-    .lead{font-size:18px;color:var(--on-blue-sub);max-width:52ch}
+    h1{font-size:44px;line-height:1.1;margin:14px 0 12px;color:var(--on-blue)}
+    .lead{font-size:18px;color:var(--on-blue-sub);max-width:60ch}
     .actions{display:flex;gap:12px;margin-top:18px}
     .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 16px;font-weight:800;border:2px solid transparent}
     .btn.primary{background:#fff;color:var(--brand-700);border-color:#EFF3FF}
     .meta{color:var(--on-blue-sub)}
 
-    /* 右侧插画卡片（白底） */
+    /* Big center Register/Login CTA (新需求) */
+    .auth-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn.outline{background:transparent;color:#fff;border-color:#c7d2fe}
+
+    /* Hero big logo with white background plate */
+    .hero-logo-plate{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:10px 14px;box-shadow:var(--shadow)}
+    .hero-logo-plate img{height:84px;width:auto} /* bigger main logo */
+    .hero-logo-plate .text{font-weight:900;color:#0b1b4a;font-size:22px}
+
+    /* Illustration card */
     .people-scene{background:linear-gradient(180deg, #ffffff, #f7fbff);border:1px solid #e6f0ff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;position:relative;margin-bottom:14px;color:var(--ink)}
     .people-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
     .avatar{position:relative;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 6px 16px rgba(17,103,177,.25)}
     .avatar.f1{background:#F4A261}
     .avatar.f2{background:#8D5524}
-    .avatar.f3{background:#F1C27D}
-    .avatar.f4{background:#C68642}
     .avatar .eyes{position:absolute;top:28px;left:18px;width:28px;height:8px;border-radius:8px;background:rgba(0,0,0,.25)}
     .avatar .smile{position:absolute;top:38px;left:22px;width:20px;height:10px;border-bottom:3px solid rgba(0,0,0,.35);border-radius:0 0 16px 16px}
     .shirt{position:absolute;bottom:-2px;left:0;right:0;height:24px;border-radius:0 0 999px 999px}
     .shirt.s1{background:var(--brand-600)}
-    .shirt.s2{background:#e11d48}
-    .shirt.s3{background:#22c55e}
-    .shirt.s4{background:#7c3aed}
+    .shirt.s2{background:#22c55e}
     .bubble{position:absolute;background:white;border:2px solid #e6eefc;border-radius:14px;padding:8px 10px;font-size:12px;box-shadow:var(--shadow);color:var(--ink)}
     .bubble:after{content:"";position:absolute;left:14px;bottom:-10px;border:6px solid transparent;border-top-color:#e6eefc}
-    .flag{position:absolute;right:-6px;top:-6px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:2px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
-    .flag img{width:18px;height:12px;display:block}
 
     section{padding:60px 0}
-    .section-title{font-size:28px;margin:0 0 10px}
+    .section-title{font-size:28px;margin:0 0 10px;display:flex;gap:8px;align-items:center}
+
+    /* 🎹 per-section interactive badge */
+    .badge-key{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:#fff;border:1px solid #e5e7eb;box-shadow:var(--shadow);font-size:18px;transition:transform .18s ease}
+    .badge-key:hover{transform:rotate(-6deg) scale(1.05)}
 
     .grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
     @media (max-width:950px){.grid{grid-template-columns:repeat(2,1fr)}}
@@ -127,39 +129,50 @@
     .accordion-content{max-height:0;overflow:hidden;transition:max-height .3s ease}
     .accordion-content-inner{padding:0 16px 16px;color:var(--muted)}
 
-    footer{background:rgba(6,18,120,.22);border-top:1px solid rgba(255,255,255,.25)}
+    footer{background:#ffffff;border-top:1px solid #e5e7eb}
     .footer-grid{display:grid;gap:18px;grid-template-columns:2fr 1fr 1fr 1fr}
-    .footer-grid a{color:#F7FAFF}
-    .copyright{font-size:13px;color:#E1E7FF;margin-top:20px}
+    .footer-grid a{color:#0f172a}
+    .copyright{font-size:13px;color:#334155;margin-top:20px}
     @media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+
+    /* ===== Modal (Register / Login) ===== */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,.45);backdrop-filter:blur(6px);z-index:100}
+    .modal.active{display:flex}
+    .modal-card{width:min(640px,94vw);background:#fff;border:1px solid #e5e7eb;border-radius:18px;box-shadow:var(--shadow);color:#0f172a}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #eef2f7}
+    .tabs{display:flex;gap:8px}
+    .tab{padding:8px 12px;border-radius:999px;border:1px solid #e5e7eb;font-weight:700;background:#f8fafc;cursor:pointer}
+    .tab.active{background:#e0e7ff;border-color:#c7d2fe}
+    .modal-body{padding:18px}
+    .form-grid{display:grid;gap:12px}
+    .input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #cbd5e1}
+    .submit{margin-top:6px}
+    .close-x{background:none;border:0;font-size:24px;cursor:pointer}
   </style>
 </head>
 <body>
-  <!-- NAV -->
+  <!-- NAV (white bar) -->
   <nav class="nav">
     <div class="container nav-inner">
-      <a class="brand" href="#home" aria-label="InScopeI1 Home">
-        <img src="assets/inscope_logo.png" alt="InScopeI1 logo">
+      <a class="brand-plate" href="#home" aria-label="InScopeI1 Home">
+        <img src="assets/inscope_logo.png" alt="InScopeI1 logo" />
+        <span class="brand-text">InScopeI1</span>
       </a>
       <div class="menu" aria-label="Primary">
-        <a href="#sessions">Sessions</a>
-        <a href="#how">How It Works</a>
-        <a href="#team">Team</a>
-        <a href="#resources">Resources</a>
-        <a href="#feedback">Feedback</a>
-        <a href="#about">About</a>
-        <a class="cta" href="#join">Join a Session</a>
+        <a href="#sessions">Sessions 活动</a>
+        <a href="#how">How It Works 使用方式</a>
+        <a href="#resources">Resources 资源</a>
+        <a href="#about">About 关于</a>
+        <a class="cta" href="#join">Join 加入</a>
       </div>
       <button class="hamburger" aria-label="Open menu" id="menuBtn">☰</button>
     </div>
     <div class="mobile-menu container" id="mobileMenu">
-      <a href="#sessions">Sessions</a>
-      <a href="#how">How It Works</a>
-      <a href="#team">Team</a>
-      <a href="#resources">Resources</a>
-      <a href="#feedback">Feedback</a>
-      <a href="#about">About</a>
-      <a href="#join"><strong>➜ Join a Session</strong></a>
+      <a href="#sessions">Sessions 活动</a>
+      <a href="#how">How It Works 使用方式</a>
+      <a href="#resources">Resources 资源</a>
+      <a href="#about">About 关于</a>
+      <a href="#join"><strong>➜ Join 加入</strong></a>
     </div>
   </nav>
 
@@ -167,38 +180,41 @@
   <header id="home" class="hero">
     <div class="container wrap">
       <div>
-        <img src="assets/inscope_logo.png" alt="InScopeI1 logo" style="height:64px;margin-bottom:12px">
-        <h1>Practice languages, meet friends, and build bridges across cultures.</h1>
-        <p class="lead">InScopeI1 is a student-led language exchange at USYD. Join guided sessions, share your mother tongue, and learn from others in a safe, welcoming space.</p>
-        <div class="actions">
-          <a class="btn primary" href="#join">Join a Session</a>
+        <!-- Bigger logo with white background plate -->
+        <div class="hero-logo-plate" aria-label="InScopeI1 logo">
+          <img src="assets/inscope_logo.png" alt="InScopeI1 logo">
+          <span class="text">InScopeI1</span>
         </div>
-        <div style="margin-top:14px" class="meta">Theme colours follow our logo – deep & light blues with a warm yellow accent.</div>
+        <h1>Practice languages in English & Chinese · 中英双语交流</h1>
+        <p class="lead">InScopeI1 is a student-led language exchange at USYD. Join guided sessions, share your mother tongue, and learn from others in a safe, welcoming space.<br/>InScopeI1 是悉尼大学的学生组织语言交流活动，欢迎加入我们的引导式小组练习，在安全友好的环境中学习与分享。</p>
+        <div class="actions">
+          <a class="btn primary" href="#join">Join a Session 参加活动</a>
+          <div class="auth-cta">
+            <button class="btn outline" id="openRegister">Register 注册</button>
+            <button class="btn outline" id="openLogin">Login 登录</button>
+          </div>
+        </div>
+        <div style="margin-top:14px" class="meta">Bilingual only (EN/中文). 仅支持中英双语。</div>
       </div>
       <div>
-        <!-- Illustration block（白底，已强制深色文字） -->
-        <div class="people-scene" aria-label="Diverse language learners illustration">
+        <!-- Illustration block -->
+        <div class="people-scene" aria-label="Diverse learners">
           <div class="people-row">
-            <div class="avatar f1"><span class="eyes"></span><span class="smile"></span><span class="shirt s1"></span><span class="flag"><img alt="USA" src="https://flagcdn.com/us.svg" /></span></div>
-            <div class="avatar f2"><span class="eyes"></span><span class="smile"></span><span class="shirt s2"></span><span class="flag"><img alt="China" src="https://flagcdn.com/cn.svg" /></span></div>
-            <div class="avatar f3"><span class="eyes"></span><span class="smile"></span><span class="shirt s3"></span><span class="flag"><img alt="Japan" src="https://flagcdn.com/jp.svg" /></span></div>
-            <div class="avatar f4"><span class="eyes"></span><span class="smile"></span><span class="shirt s4"></span><span class="flag"><img alt="France" src="https://flagcdn.com/fr.svg" /></span></div>
-            <div class="avatar f3"><span class="eyes"></span><span class="smile"></span><span class="shirt s2"></span><span class="flag"><img alt="Spain" src="https://flagcdn.com/es.svg" /></span></div>
+            <div class="avatar f1"><span class="eyes"></span><span class="smile"></span><span class="shirt s1"></span></div>
+            <div class="avatar f2"><span class="eyes"></span><span class="smile"></span><span class="shirt s2"></span></div>
           </div>
-          <div class="bubble" style="left:12px;top:8px">Hello! 你好！こんにちは！</div>
-          <div class="bubble" style="right:12px;top:54px">Let’s practice together ✨</div>
+          <div class="bubble" style="left:12px;top:8px">Hello! 你好！</div>
+          <div class="bubble" style="right:12px;top:54px">Let’s practice together 一起练习 ✨</div>
         </div>
 
         <aside class="people-scene">
-          <h3 style="margin:0 0 8px">Next session highlights</h3>
-          <div class="meta" style="color:#334155">Thursday, 5:30–7:00pm · Fisher Library, Level 3</div>
+          <h3 style="margin:0 0 8px">Next session highlights · 下期预告</h3>
+          <div class="meta" style="color:#334155">Time: TBD · 时间：暂定 · Fisher Library</div>
           <div style="margin:12px 0 8px">
-            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇨🇳 Mandarin</span>
-            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇯🇵 Japanese</span>
-            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇫🇷 French</span>
-            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇪🇸 Spanish</span>
+            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇨🇳 Mandarin 中文</span>
+            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇬🇧 English 英语</span>
           </div>
-          <a class="btn primary" href="#join" style="margin-top:8px">Reserve a spot</a>
+          <a class="btn primary" href="#join" style="margin-top:8px">Reserve a spot 预约席位</a>
         </aside>
       </div>
     </div>
@@ -207,25 +223,34 @@
   <!-- HOW -->
   <section id="how">
     <div class="container surface">
-      <h2 class="section-title">How It Works</h2>
-      <p class="section-sub">Simple, structured, and social. Sessions run weekly during term.</p>
+      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> How It Works · 使用方式</h2>
+      <p class="section-sub">Simple, structured, and social. Sessions run weekly during term. · 简单结构化，社交友好。学期内每周举办。</p>
       <div class="steps">
-        <div class="step"><div class="step-num">Step 1</div><h5>Pick a language table</h5><p class="meta">Choose your target language and level. Hosts guide small-group conversation.</p></div>
-        <div class="step"><div class="step-num">Step 2</div><h5>Share & practice</h5><p class="meta">Short prompts, role-plays, and games keep it fun and inclusive.</p></div>
-        <div class="step"><div class="step-num">Step 3</div><h5>Reflect & connect</h5><p class="meta">Exchange tips, get resources, and make friends from around the world.</p></div>
+        <div class="step"><div class="step-num">Step 1</div><h5>Pick a table · 选择语言桌</h5><p class="meta">Choose EN or 中文 and your level. · 选择英语或中文及水平。</p></div>
+        <div class="step"><div class="step-num">Step 2</div><h5>Share & practice · 分享练习</h5><p class="meta">Prompts, role-plays, and games. · 主题卡、情景扮演、小游戏。</p></div>
+        <div class="step"><div class="step-num">Step 3</div><h5>Reflect & connect · 交流拓展</h5><p class="meta">Resources & friends from around the world. · 获取资源，结交朋友。</p></div>
       </div>
     </div>
   </section>
 
-  <!-- SESSIONS -->
+  <!-- SESSIONS (only two, time TBD) -->
   <section id="sessions">
     <div class="container surface">
-      <h2 class="section-title">Upcoming Sessions</h2>
-      <p class="section-sub">Reserve a seat – spaces are limited to keep groups small.</p>
+      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Upcoming Sessions · 即将举行</h2>
+      <p class="section-sub">Reserve a seat – spaces are limited. · 名额有限，先到先得。时间均为暂定。</p>
       <div class="grid">
-        <article class="card"><div class="meta">Week 4 · Thu 5:30–7:00pm</div><h4>Conversation Night – Beginner Tables</h4><p class="meta">Mandarin · Japanese · French</p><a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a></article>
-        <article class="card"><div class="meta">Week 5 · Thu 5:30–7:00pm</div><h4>Games & Role-play</h4><p class="meta">Spanish · Korean · German</p><a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a></article>
-        <article class="card"><div class="meta">Week 6 · Sat 2:00–3:30pm</div><h4>Coffee & Languages (USU pop-up)</h4><p class="meta">All languages · Social</p><a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a></article>
+        <article class="card">
+          <div class="meta">Time: TBD · 时间：暂定</div>
+          <h4>Conversation Night · 交流之夜</h4>
+          <p class="meta">EN · 中文 · 小组引导</p>
+          <a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a>
+        </article>
+        <article class="card">
+          <div class="meta">Time: TBD · 时间：暂定</div>
+          <h4>Games & Role-play · 游戏与情景</h4>
+          <p class="meta">EN · 中文 · 轻松互动</p>
+          <a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a>
+        </article>
       </div>
     </div>
   </section>
@@ -233,41 +258,26 @@
   <!-- RESOURCES -->
   <section id="resources">
     <div class="container surface">
-      <h2 class="section-title">Resources</h2>
-      <p class="section-sub">Curated links to help you keep learning between sessions.</p>
+      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Resources · 资源</h2>
+      <p class="section-sub">Keep learning between sessions. · 课外自学资源。</p>
       <div class="grid">
-        <div class="card"><h4>Pronunciation decks</h4><p class="meta">Anki & Quizlet sets shared by the community.</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Open</a></div>
-        <div class="card"><h4>Conversation prompts</h4><p class="meta">Download printable topic cards.</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Download</a></div>
-        <div class="card"><h4>Community groups</h4><p class="meta">USYD clubs, Discords, and local meetups.</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Explore</a></div>
+        <div class="card"><h4>Pronunciation decks · 发音卡组</h4><p class="meta">Community Anki & Quizlet. · 社区共享。</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Open 打开</a></div>
+        <div class="card"><h4>Conversation prompts · 话题卡</h4><p class="meta">Printable topics. · 可打印。</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Download 下载</a></div>
+        <div class="card"><h4>Community groups · 社群</h4><p class="meta">USYD clubs & meetups. · 社团与活动。</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Explore 浏览</a></div>
       </div>
     </div>
   </section>
 
-  <!-- TEAM -->
-  <section id="team">
+  <!-- FUN GALLERY (you can add images here) -->
+  <section id="gallery">
     <div class="container surface">
-      <h2 class="section-title">Team</h2>
-      <p class="section-sub">Student hosts & coordinators who make InScopeI1 possible.</p>
-      <div class="grid">
-        <div class="card"><h4>Session Hosts</h4><p class="meta">Friendly leaders trained to run inclusive tables.</p></div>
-        <div class="card"><h4>Program Coordinators</h4><p class="meta">Scheduling, partnerships, and resources.</p></div>
-        <div class="card"><h4>Advisors</h4><p class="meta">Staff & alumni supporting pedagogy and events.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEEDBACK -->
-  <section id="feedback">
-    <div class="container surface">
-      <h2 class="section-title">Feedback & Certificates</h2>
-      <p class="section-sub">Tell us how we did – we love shout-outs and suggestions.</p>
-      <div class="accordion-item">
-        <button type="button" class="acc-btn">What happens in a typical 90-minute session? <span>＋</span></button>
-        <div class="accordion-content"><div class="accordion-content-inner">10 min icebreakers · 60 min guided practice · 15 min social · 5 min wrap-up & resources.</div></div>
-      </div>
-      <div class="accordion-item">
-        <button type="button" class="acc-btn">Can I get a participation certificate? <span>＋</span></button>
-        <div class="accordion-content"><div class="accordion-content-inner">Yes – attendees who help facilitate or complete reflection tasks may request a participation note.</div></div>
+      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Fun Gallery · 趣味画廊</h2>
+      <p class="section-sub">Add your own images below. · 在此添加你的有趣图片。</p>
+      <div class="grid" id="galleryGrid">
+        <!-- Example placeholder cards. Replace src with your files under /assets/images/ -->
+        <div class="card"><img src="assets/images/sample1.jpg" alt="sample 1"><p class="meta">Caption · 说明</p></div>
+        <div class="card"><img src="assets/images/sample2.jpg" alt="sample 2"><p class="meta">Caption · 说明</p></div>
+        <div class="card"><img src="assets/images/sample3.jpg" alt="sample 3"><p class="meta">Caption · 说明</p></div>
       </div>
     </div>
   </section>
@@ -275,52 +285,51 @@
   <!-- ABOUT -->
   <section id="about">
     <div class="container surface">
-      <h2 class="section-title">About the Project</h2>
-      <p class="section-sub">InScopeI1 is a not-for-profit, student-run initiative at the University of Sydney that celebrates International Mother Language Day values year-round.</p>
-      <div class="card"><p>We believe language is a bridge between cultures. By embracing the diversity of languages, we open up new avenues for understanding and collaboration.</p></div>
+      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> About · 关于</h2>
+      <p class="section-sub">InScopeI1 is a not-for-profit, student-run initiative at the University of Sydney. · 学生自发、非营利的语言交流项目。</p>
+      <div class="card"><p>We believe language is a bridge between cultures. · 我们相信语言是连接文化的桥梁。</p></div>
     </div>
   </section>
 
   <!-- JOIN -->
   <section id="join">
     <div class="container surface">
-      <h2 class="section-title">Reserve Your Spot</h2>
-      <p class="section-sub">Drop your email and we’ll send you the next session link.</p>
+      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Reserve Your Spot · 预约席位</h2>
+      <p class="section-sub">Leave your email to get the next link. · 留下邮箱获取最新活动链接。</p>
       <form id="joinForm" class="card">
         <div class="grid" style="grid-template-columns:2fr 1fr">
-          <input required type="email" placeholder="you@uni.sydney.edu.au" style="width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1">
-          <button class="btn primary" type="submit">Notify me</button>
+          <input required type="email" placeholder="you@uni.sydney.edu.au / 你的邮箱" class="input">
+          <button class="btn primary" type="submit">Notify me 通知我</button>
         </div>
         <div id="joinMsg" class="meta" style="margin-top:8px;color:#334155"></div>
       </form>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (white) -->
   <footer>
     <div class="container" style="padding:36px 0">
       <div class="footer-grid">
         <div>
-          <div class="brand" style="margin-bottom:8px">
+          <div class="brand-plate" style="margin-bottom:8px">
             <img src="assets/inscope_logo.png" alt="" onerror="this.style.display='none'">
-            <span style="font-weight:800">InScopeI1</span>
+            <span class="brand-text">InScopeI1</span>
           </div>
-          <p class="meta">A student-led language exchange community at USYD.</p>
+          <p class="meta">A student-led bilingual language exchange at USYD. · 悉尼大学学生双语语言交流。</p>
         </div>
         <div>
-          <strong>Explore</strong>
-          <div><a href="#sessions">Sessions</a></div>
-          <div><a href="#resources">Resources</a></div>
+          <strong>Explore · 导航</strong>
+          <div><a href="#sessions">Sessions 活动</a></div>
+          <div><a href="#resources">Resources 资源</a></div>
         </div>
         <div>
-          <strong>Project</strong>
-          <div><a href="#how">How it works</a></div>
-          <div><a href="#feedback">Feedback</a></div>
-          <div><a href="#about">About</a></div>
+          <strong>Project · 项目</strong>
+          <div><a href="#how">How it works 使用方式</a></div>
+          <div><a href="#about">About 关于</a></div>
         </div>
         <div>
-          <strong>Get in touch</strong>
-          <div><a href="#join">Join a session</a></div>
+          <strong>Get in touch · 联系</strong>
+          <div><a href="#join">Join a session 加入活动</a></div>
           <div><a href="mailto:hello@inscopei1.com.au">hello@inscopei1.com.au</a></div>
         </div>
       </div>
@@ -328,17 +337,52 @@
     </div>
   </footer>
 
+  <!-- ===== Register/Login Modal (front-end only) ===== -->
+  <div class="modal" id="authModal" aria-hidden="true" role="dialog">
+    <div class="modal-card" role="document">
+      <div class="modal-head">
+        <div class="tabs">
+          <button class="tab active" id="tabRegister" type="button">Register 注册</button>
+          <button class="tab" id="tabLogin" type="button">Login 登录</button>
+        </div>
+        <button class="close-x" id="closeAuth" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <!-- Register form -->
+        <form id="formRegister" class="form-grid">
+          <input required class="input" type="email" placeholder="Email 邮箱">
+          <input required class="input" type="text" placeholder="ID / Username 用户名">
+          <input required class="input" type="password" placeholder="Password 密码">
+          <button class="btn primary submit" type="submit">Create account 创建账号</button>
+        </form>
+        <!-- Login form -->
+        <form id="formLogin" class="form-grid" style="display:none">
+          <input required class="input" type="email" placeholder="Email 邮箱">
+          <input required class="input" type="password" placeholder="Password 密码">
+          <button class="btn primary submit" type="submit">Sign in 登录</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Mobile menu
     const btn = document.getElementById('menuBtn');
     const mm = document.getElementById('mobileMenu');
     btn?.addEventListener('click',()=>{mm.style.display = mm.style.display === 'block' ? 'none':'block';});
+
+    // Simple join form feedback
     document.getElementById('joinForm')?.addEventListener('submit', e=>{
       e.preventDefault();
-      document.getElementById('joinMsg').textContent = "Thanks! We'll email you the next session link.";
+      document.getElementById('joinMsg').textContent = "Thanks! We'll email you the next session link. 感谢，我们会将最新链接发送到你的邮箱。";
       e.target.reset();
     });
-    document.querySelectorAll('.acc-btn').forEach(b=>{
+
+    // Accordion
+    document.querySelectorAll('.acc-btn')?.forEach(b=>{
       b.addEventListener('click',()=>{
         const wrap = b.parentElement.querySelector('.accordion-content');
         const open = wrap.style.maxHeight && wrap.style.maxHeight !== '0px';
@@ -346,6 +390,53 @@
         b.querySelector('span').textContent = open ? '＋' : '－';
       });
     });
+
+    // ===== Auth Modal logic =====
+    const authModal = document.getElementById('authModal');
+    const openRegister = document.getElementById('openRegister');
+    const openLogin = document.getElementById('openLogin');
+    const closeAuth = document.getElementById('closeAuth');
+    const tabReg = document.getElementById('tabRegister');
+    const tabLog = document.getElementById('tabLogin');
+    const formReg = document.getElementById('formRegister');
+    const formLog = document.getElementById('formLogin');
+
+    function openModal(mode){
+      authModal.classList.add('active');
+      if(mode==='login'){tabToLogin()} else {tabToRegister()}
+    }
+    function closeModal(){authModal.classList.remove('active')}
+
+    function tabToRegister(){
+      tabReg.classList.add('active'); tabLog.classList.remove('active');
+      formReg.style.display='grid'; formLog.style.display='none';
+    }
+    function tabToLogin(){
+      tabLog.classList.add('active'); tabReg.classList.remove('active');
+      formReg.style.display='none'; formLog.style.display='grid';
+    }
+
+    openRegister?.addEventListener('click',()=>openModal('register'));
+    openLogin?.addEventListener('click',()=>openModal('login'));
+    closeAuth?.addEventListener('click',closeModal);
+    authModal?.addEventListener('click',e=>{ if(e.target===authModal) closeModal(); });
+
+    tabReg?.addEventListener('click',tabToRegister);
+    tabLog?.addEventListener('click',tabToLogin);
+
+    // Fake submit handlers (front-end only)
+    formReg?.addEventListener('submit',e=>{e.preventDefault(); alert('Registered (front-end demo). 后端稍后接入。'); closeModal();});
+    formLog?.addEventListener('submit',e=>{e.preventDefault(); alert('Logged in (front-end demo). 后端稍后接入。'); closeModal();});
+
+    // ===== How to add fun images dynamically (optional example) =====
+    // Example function: call addGalleryItem('assets/images/my.jpg','说明') to append.
+    window.addGalleryItem = function(src, caption){
+      const g = document.getElementById('galleryGrid');
+      const div = document.createElement('div');
+      div.className='card';
+      div.innerHTML = `<img src="${src}" alt="user image"><p class="meta">${caption||''}</p>`;
+      g.appendChild(div);
+    }
   </script>
 </body>
 </html>
