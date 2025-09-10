@@ -3,281 +3,193 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>InScopeI1 – Language Exchange @ USYD</title>
-  <meta name="description" content="InScopeI1 – A friendly, student-led bilingual language exchange community at USYD (中英双语语言交流社区)。" />
+  <title>InScopeI1 – Bilingual Exchange @ USYD</title>
+  <meta name="description" content="InScopeI1 – A bilingual (EN/中文) student-led language exchange at USYD." />
   <link rel="icon" href="/favicon.ico" />
   <style>
     :root{
-      /* Theme */
-      --brand-800:#1230FF;
       --brand-700:#1E3AFF;
       --brand-600:#2F5BFF;
-      --brand-500:#4D78FF;
-      --brand-300:#AECBFF;
       --accent:#FFC83D;
       --ink:#0F172A;
-      --muted:#475569;
-      --bg:#1E3AFF;              /* page hero background */
-      --card:#FFFFFF;
+      --card:#fff;
       --radius:16px;
-      --shadow:0 10px 24px rgba(16,24,40,.12);
-      --on-blue:#F7FAFF;
-      --on-blue-sub:#E4EDFF;
-      --on-blue-link:#FFEB99;
+      --shadow:0 8px 20px rgba(0,0,0,.1);
+      /* 与 BG2/3/4 的深蓝保持一致（可按需微调） */
+      --deep-blue:#0b3a7c;
+      --muted:#475569;
     }
+    body{margin:0;font-family:ui-sans-serif,system-ui;line-height:1.6;background:#f3f6fb}
+    a{text-decoration:none}
 
-    html{scroll-behavior:smooth}
-    *{box-sizing:border-box}
-
-    /* Page background: gradient blues */
-    body{
-      margin:0;
-      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--on-blue);
-      background:var(--bg);
-      background-image:
-        radial-gradient(1200px 600px at 50% -10%, rgba(121,161,255,.35), transparent),
-        linear-gradient(160deg, var(--brand-600), var(--brand-800));
-    }
-    a{color:var(--on-blue-link);text-decoration:none}
-    img{max-width:100%;display:block}
-    .container{max-width:1100px;margin:0 auto;padding:0 20px}
-
-    /* ===== NAV: full white bar (要求：左上角栏为白色，不突兀) ===== */
-    .nav{position:sticky;top:0;z-index:50;background:#ffffff;border-bottom:1px solid #e5e7eb}
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
-
-    /* Logo block bigger + white background plate (要求：logo更大、背景白) */
-    .brand-plate{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:6px 10px;box-shadow:var(--shadow)}
-    .brand-plate img{height:44px;width:auto} /* bigger small logo */
-    .brand-plate .brand-text{font-weight:900;color:#0b1b4a}
-
+    /* NAV */
+    .nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:10px 20px}
+    .brand-plate{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;box-shadow:var(--shadow)}
+    .brand-plate img{height:40px}
+    .brand-text{font-weight:800;color:#0b1b4a}
     .menu{display:flex;gap:18px;align-items:center}
-    .menu a{font-weight:700;color:#0f172a}
-    .menu a:hover{opacity:.85}
-    .cta{background:var(--brand-700);color:#fff;font-weight:800;padding:10px 14px;border-radius:999px;border:2px solid #dbe6ff;box-shadow:var(--shadow)}
-    .hamburger{display:none;background:none;border:none;font-size:22px;color:#0f172a}
+    .menu a{font-weight:600;color:#0f172a}
+    .cta{background:var(--brand-700);color:#fff;font-weight:700;padding:8px 14px;border-radius:999px}
+    .hamburger{display:none}
+    @media(max-width:850px){.menu{display:none}.hamburger{display:block}}
 
-    @media (max-width:850px){
-      .menu{display:none}
-      .hamburger{display:block}
-      .mobile-menu{display:none;position:absolute;left:0;right:0;top:66px;background:#ffffff;border-bottom:1px solid #e5e7eb}
-      .mobile-menu a{display:block;padding:14px 20px;border-top:1px solid #f1f5f9;color:#0f172a}
+    /* ===== HERO：BG1 完整显示（不裁切） ===== */
+    .hero{
+      position:relative;
+      color:#fff;
+      text-align:left;
+      background: url("assets/BG1.png") center bottom / contain no-repeat;
+      /* 给一个深蓝底色，避免宽屏两侧空白突兀 */
+      background-color:#fff;
+      min-height:78vh;
+    }
+    .hero .wrap{
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 180px 20px 100px;
+    }
+    .hero-logo-plate{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:10px 14px;box-shadow:var(--shadow)}
+    .hero-logo-plate img{height:80px}
+    .hero-logo-plate .text{font-weight:900;font-size:22px;color:#0b1b4a}
+    h1 {
+      font-size: 48px;
+      line-height: 1.2;
+      margin: 20px 0;
+      color: #fff; 
+      text-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
 
-    /* Surfaces (white cards) */
-    .surface{background:var(--card);color:var(--ink);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
-    .surface h1,.surface h2,.surface h3,.surface h4,.surface h5,.surface p,.surface li,.surface .card{color:var(--ink)}
-    .surface .section-sub,.surface .meta{color:var(--muted)}
-    .surface a{color:#1f4fff}
+    .actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:12px 18px;border-radius:999px;font-weight:700;border:2px solid transparent;cursor:pointer}
+    .btn.primary{background:#fff;color:#1E3AFF;border-color:#dbeafe}
+    .btn.outline{background:rgba(30,58,138,0.85);color:#fff;border:2px solid #1E3AFF}
+    .btn.outline:hover {
+      background: #1E3AFF;
+      border-color: #1E3AFF;
+    }
 
-    /* ===== HERO ===== */
-    .hero{position:relative;overflow:hidden}
-    .hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;padding:68px 0}
-    h1{font-size:44px;line-height:1.1;margin:14px 0 12px;color:var(--on-blue)}
-    .lead{font-size:18px;color:var(--on-blue-sub);max-width:60ch}
-    .actions{display:flex;gap:12px;margin-top:18px}
-    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 16px;font-weight:800;border:2px solid transparent}
-    .btn.primary{background:#fff;color:var(--brand-700);border-color:#EFF3FF}
-    .meta{color:var(--on-blue-sub)}
+    /* ===== Section base ===== */
+    section{padding:60px 20px}
+    .container{max-width:1100px;margin:0 auto}
+    .surface{background:var(--card);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:28px}
+    .section-title{font-size:26px;display:flex;align-items:center;gap:8px;margin:0 0 18px}
+    .badge-key{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border:1px solid #e5e7eb;border-radius:6px;background:#fff;box-shadow:var(--shadow)}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+    .meta{color:var(--muted);font-size:14px}
 
-    /* Big center Register/Login CTA (新需求) */
-    .auth-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn.outline{background:transparent;color:#fff;border-color:#c7d2fe}
+    /* ===== 带左侧图片的版式 ===== */
+    .section-wrap{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+    .section-img{
+      background:#0c3b82; /* 与图片边缘颜色接近，过渡友好 */
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid #e5e7eb;
+      box-shadow:var(--shadow);
+    }
+    .section-img img{display:block;width:100%;height:auto}
 
-    /* Hero big logo with white background plate */
-    .hero-logo-plate{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:10px 14px;box-shadow:var(--shadow)}
-    .hero-logo-plate img{height:84px;width:auto} /* bigger main logo */
-    .hero-logo-plate .text{font-weight:900;color:#0b1b4a;font-size:22px}
-
-    /* Illustration card */
-    .people-scene{background:linear-gradient(180deg, #ffffff, #f7fbff);border:1px solid #e6f0ff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;position:relative;margin-bottom:14px;color:var(--ink)}
-    .people-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
-    .avatar{position:relative;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 6px 16px rgba(17,103,177,.25)}
-    .avatar.f1{background:#F4A261}
-    .avatar.f2{background:#8D5524}
-    .avatar .eyes{position:absolute;top:28px;left:18px;width:28px;height:8px;border-radius:8px;background:rgba(0,0,0,.25)}
-    .avatar .smile{position:absolute;top:38px;left:22px;width:20px;height:10px;border-bottom:3px solid rgba(0,0,0,.35);border-radius:0 0 16px 16px}
-    .shirt{position:absolute;bottom:-2px;left:0;right:0;height:24px;border-radius:0 0 999px 999px}
-    .shirt.s1{background:var(--brand-600)}
-    .shirt.s2{background:#22c55e}
-    .bubble{position:absolute;background:white;border:2px solid #e6eefc;border-radius:14px;padding:8px 10px;font-size:12px;box-shadow:var(--shadow);color:var(--ink)}
-    .bubble:after{content:"";position:absolute;left:14px;bottom:-10px;border:6px solid transparent;border-top-color:#e6eefc}
-
-    section{padding:60px 0}
-    .section-title{font-size:28px;margin:0 0 10px;display:flex;gap:8px;align-items:center}
-
-    /* 🎹 per-section interactive badge */
-    .badge-key{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:#fff;border:1px solid #e5e7eb;box-shadow:var(--shadow);font-size:18px;transition:transform .18s ease}
-    .badge-key:hover{transform:rotate(-6deg) scale(1.05)}
-
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
-    @media (max-width:950px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:640px){.grid{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
-    .card h4{margin:.3rem 0 .2rem}
-    .card .meta{color:var(--muted)}
-
-    .steps{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
-    .step{background:white;border:1px dashed #cfe4ff;border-radius:var(--radius);padding:18px}
-    .step-num{font-weight:900;color:var(--brand-600);font-size:13px}
-    .step h5{font-size:18px;margin:4px 0}
-    @media (max-width:900px){.steps{grid-template-columns:1fr}}
-
-    .accordion-item{border:1px solid #e5e7eb;border-radius:12px;margin-bottom:10px;background:white;color:var(--ink)}
-    .accordion-item button{width:100%;text-align:left;background:none;border:0;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;color:var(--ink)}
-    .accordion-content{max-height:0;overflow:hidden;transition:max-height .3s ease}
-    .accordion-content-inner{padding:0 16px 16px;color:var(--muted)}
-
-    footer{background:#ffffff;border-top:1px solid #e5e7eb}
-    .footer-grid{display:grid;gap:18px;grid-template-columns:2fr 1fr 1fr 1fr}
-    .footer-grid a{color:#0f172a}
-    .copyright{font-size:13px;color:#334155;margin-top:20px}
-    @media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
-
-    /* ===== Modal (Register / Login) ===== */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,6,23,.45);backdrop-filter:blur(6px);z-index:100}
-    .modal.active{display:flex}
-    .modal-card{width:min(640px,94vw);background:#fff;border:1px solid #e5e7eb;border-radius:18px;box-shadow:var(--shadow);color:#0f172a}
-    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #eef2f7}
-    .tabs{display:flex;gap:8px}
-    .tab{padding:8px 12px;border-radius:999px;border:1px solid #e5e7eb;font-weight:700;background:#f8fafc;cursor:pointer}
-    .tab.active{background:#e0e7ff;border-color:#c7d2fe}
-    .modal-body{padding:18px}
-    .form-grid{display:grid;gap:12px}
-    .input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #cbd5e1}
-    .submit{margin-top:6px}
-    .close-x{background:none;border:0;font-size:24px;cursor:pointer}
+    /* FOOTER（深蓝） */
+    footer{background:var(--deep-blue);border-top:1px solid rgba(255,255,255,.15);padding:40px 20px;color:#eaf2ff}
+    .footer-grid{display:grid;gap:18px;grid-template-columns:2fr 1fr 1fr 1fr;max-width:1100px;margin:0 auto}
+    .footer-grid a{color:#fff}
+    .brand-plate.footer{box-shadow:none;border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.92)}
+    .copyright{text-align:center;margin-top:20px;font-size:13px;color:#e4edff}
+    @media(max-width:900px){
+      .footer-grid{grid-template-columns:1fr 1fr}
+      .section-wrap{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
-  <!-- NAV (white bar) -->
+  <!-- NAV -->
   <nav class="nav">
-    <div class="container nav-inner">
-      <a class="brand-plate" href="#home" aria-label="InScopeI1 Home">
-        <img src="assets/inscope_logo.png" alt="InScopeI1 logo" />
-        <span class="brand-text">InScopeI1</span>
-      </a>
-      <div class="menu" aria-label="Primary">
+    <div class="nav-inner">
+      <a class="brand-plate" href="#home"><img src="assets/inscope_logo.png" alt=""><span class="brand-text">InScopeI1</span></a>
+      <div class="menu">
         <a href="#sessions">Sessions 活动</a>
         <a href="#how">How It Works 使用方式</a>
         <a href="#resources">Resources 资源</a>
         <a href="#about">About 关于</a>
-        <a class="cta" href="#join">Join 加入</a>
+        <a class="cta" href="#sessions">Join 加入</a>
       </div>
-      <button class="hamburger" aria-label="Open menu" id="menuBtn">☰</button>
-    </div>
-    <div class="mobile-menu container" id="mobileMenu">
-      <a href="#sessions">Sessions 活动</a>
-      <a href="#how">How It Works 使用方式</a>
-      <a href="#resources">Resources 资源</a>
-      <a href="#about">About 关于</a>
-      <a href="#join"><strong>➜ Join 加入</strong></a>
+      <button class="hamburger">☰</button>
     </div>
   </nav>
 
   <!-- HERO -->
   <header id="home" class="hero">
-    <div class="container wrap">
-      <div>
-        <!-- Bigger logo with white background plate -->
-        <div class="hero-logo-plate" aria-label="InScopeI1 logo">
-          <img src="assets/inscope_logo.png" alt="InScopeI1 logo">
-          <span class="text">InScopeI1</span>
-        </div>
-        <h1>Practice languages in English & Chinese · 中英双语交流</h1>
-        <p class="lead">InScopeI1 is a student-led language exchange at USYD. Join guided sessions, share your mother tongue, and learn from others in a safe, welcoming space.<br/>InScopeI1 是悉尼大学的学生组织语言交流活动，欢迎加入我们的引导式小组练习，在安全友好的环境中学习与分享。</p>
-        <div class="actions">
-          <a class="btn primary" href="#join">Join a Session 参加活动</a>
-          <div class="auth-cta">
-            <button class="btn outline" id="openRegister">Register 注册</button>
-            <button class="btn outline" id="openLogin">Login 登录</button>
-          </div>
-        </div>
-        <div style="margin-top:14px" class="meta">Bilingual only (EN/中文). 仅支持中英双语。</div>
-      </div>
-      <div>
-        <!-- Illustration block -->
-        <div class="people-scene" aria-label="Diverse learners">
-          <div class="people-row">
-            <div class="avatar f1"><span class="eyes"></span><span class="smile"></span><span class="shirt s1"></span></div>
-            <div class="avatar f2"><span class="eyes"></span><span class="smile"></span><span class="shirt s2"></span></div>
-          </div>
-          <div class="bubble" style="left:12px;top:8px">Hello! 你好！</div>
-          <div class="bubble" style="right:12px;top:54px">Let’s practice together 一起练习 ✨</div>
-        </div>
-
-        <aside class="people-scene">
-          <h3 style="margin:0 0 8px">Next session highlights · 下期预告</h3>
-          <div class="meta" style="color:#334155">Time: TBD · 时间：暂定 · Fisher Library</div>
-          <div style="margin:12px 0 8px">
-            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇨🇳 Mandarin 中文</span>
-            <span class="card" style="display:inline-block;padding:6px 10px;margin-right:6px">🇬🇧 English 英语</span>
-          </div>
-          <a class="btn primary" href="#join" style="margin-top:8px">Reserve a spot 预约席位</a>
-        </aside>
+    <div class="wrap">
+      <div class="hero-logo-plate"><img src="assets/inscope_logo.png" alt=""><span class="text">InScopeI1</span></div>
+      <h1>Practice languages in English & Chinese · 中英双语交流</h1>
+      <div class="actions">
+        <a class="btn primary" href="#sessions">Join a Session 参加活动</a>
+        <button class="btn outline">Register 注册</button>
+        <button class="btn outline">Login 登录</button>
       </div>
     </div>
   </header>
 
   <!-- HOW -->
   <section id="how">
-    <div class="container surface">
-      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> How It Works · 使用方式</h2>
-      <p class="section-sub">Simple, structured, and social. Sessions run weekly during term. · 简单结构化，社交友好。学期内每周举办。</p>
-      <div class="steps">
-        <div class="step"><div class="step-num">Step 1</div><h5>Pick a table · 选择语言桌</h5><p class="meta">Choose EN or 中文 and your level. · 选择英语或中文及水平。</p></div>
-        <div class="step"><div class="step-num">Step 2</div><h5>Share & practice · 分享练习</h5><p class="meta">Prompts, role-plays, and games. · 主题卡、情景扮演、小游戏。</p></div>
-        <div class="step"><div class="step-num">Step 3</div><h5>Reflect & connect · 交流拓展</h5><p class="meta">Resources & friends from around the world. · 获取资源，结交朋友。</p></div>
+    <div class="container">
+      <div class="section-wrap">
+        <aside class="section-img">
+          <img src="assets/BG2.png" alt="How it works illustration">
+        </aside>
+        <div class="surface">
+          <h2 class="section-title"><span class="badge-key">🎹</span> How It Works · 使用方式</h2>
+          <div class="grid">
+            <div class="card">Step 1 · Pick a table 选择语言桌</div>
+            <div class="card">Step 2 · Share & practice 分享练习</div>
+            <div class="card">Step 3 · Reflect & connect 交流拓展</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- SESSIONS (only two, time TBD) -->
+  <!-- SESSIONS -->
   <section id="sessions">
-    <div class="container surface">
-      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Upcoming Sessions · 即将举行</h2>
-      <p class="section-sub">Reserve a seat – spaces are limited. · 名额有限，先到先得。时间均为暂定。</p>
-      <div class="grid">
-        <article class="card">
-          <div class="meta">Time: TBD · 时间：暂定</div>
-          <h4>Conversation Night · 交流之夜</h4>
-          <p class="meta">EN · 中文 · 小组引导</p>
-          <a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a>
-        </article>
-        <article class="card">
-          <div class="meta">Time: TBD · 时间：暂定</div>
-          <h4>Games & Role-play · 游戏与情景</h4>
-          <p class="meta">EN · 中文 · 轻松互动</p>
-          <a class="btn" style="border:2px solid #e2e8f0" href="#join">RSVP</a>
-        </article>
+    <div class="container">
+      <div class="section-wrap">
+        <aside class="section-img">
+          <img src="assets/BG3.png" alt="Sessions illustration">
+        </aside>
+        <div class="surface">
+          <h2 class="section-title"><span class="badge-key">🎹</span> Sessions 活动</h2>
+          <div class="grid">
+            <div class="card"><div class="meta">Time: TBD</div><h4>Pilot Session 1</h4></div>
+            <div class="card"><div class="meta">Time: TBD</div><h4>Pilot Session 2</h4></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- RESOURCES -->
   <section id="resources">
-    <div class="container surface">
-      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Resources · 资源</h2>
-      <p class="section-sub">Keep learning between sessions. · 课外自学资源。</p>
-      <div class="grid">
-        <div class="card"><h4>Pronunciation decks · 发音卡组</h4><p class="meta">Community Anki & Quizlet. · 社区共享。</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Open 打开</a></div>
-        <div class="card"><h4>Conversation prompts · 话题卡</h4><p class="meta">Printable topics. · 可打印。</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Download 下载</a></div>
-        <div class="card"><h4>Community groups · 社群</h4><p class="meta">USYD clubs & meetups. · 社团与活动。</p><a class="btn" style="border:2px solid #e2e8f0" href="#">Explore 浏览</a></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FUN GALLERY (you can add images here) -->
-  <section id="gallery">
-    <div class="container surface">
-      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Fun Gallery · 趣味画廊</h2>
-      <p class="section-sub">Add your own images below. · 在此添加你的有趣图片。</p>
-      <div class="grid" id="galleryGrid">
-        <!-- Example placeholder cards. Replace src with your files under /assets/images/ -->
-        <div class="card"><img src="assets/images/sample1.jpg" alt="sample 1"><p class="meta">Caption · 说明</p></div>
-        <div class="card"><img src="assets/images/sample2.jpg" alt="sample 2"><p class="meta">Caption · 说明</p></div>
-        <div class="card"><img src="assets/images/sample3.jpg" alt="sample 3"><p class="meta">Caption · 说明</p></div>
+    <div class="container">
+      <div class="section-wrap">
+        <aside class="section-img">
+          <img src="assets/BG4.png" alt="Resources illustration">
+        </aside>
+        <div class="surface">
+          <h2 class="section-title"><span class="badge-key">🎹</span> Resources 资源</h2>
+          <div class="grid">
+            <div class="card">Resource 1</div>
+            <div class="card">Resource 2</div>
+            <div class="card">Resource 3</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -285,158 +197,27 @@
   <!-- ABOUT -->
   <section id="about">
     <div class="container surface">
-      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> About · 关于</h2>
-      <p class="section-sub">InScopeI1 is a not-for-profit, student-run initiative at the University of Sydney. · 学生自发、非营利的语言交流项目。</p>
-      <div class="card"><p>We believe language is a bridge between cultures. · 我们相信语言是连接文化的桥梁。</p></div>
+      <h2 class="section-title"><span class="badge-key">🎹</span> About 关于</h2>
+      <div class="card"><p>InScopeI1 is a not-for-profit, student-run bilingual exchange. · 学生自发、非营利的双语交流项目。</p></div>
     </div>
   </section>
 
-  <!-- JOIN -->
-  <section id="join">
-    <div class="container surface">
-      <h2 class="section-title"><span class="badge-key" title="Hover!">🎹</span> Reserve Your Spot · 预约席位</h2>
-      <p class="section-sub">Leave your email to get the next link. · 留下邮箱获取最新活动链接。</p>
-      <form id="joinForm" class="card">
-        <div class="grid" style="grid-template-columns:2fr 1fr">
-          <input required type="email" placeholder="you@uni.sydney.edu.au / 你的邮箱" class="input">
-          <button class="btn primary" type="submit">Notify me 通知我</button>
-        </div>
-        <div id="joinMsg" class="meta" style="margin-top:8px;color:#334155"></div>
-      </form>
-    </div>
-  </section>
-
-  <!-- FOOTER (white) -->
+  <!-- FOOTER（与图片背景同色） -->
   <footer>
-    <div class="container" style="padding:36px 0">
-      <div class="footer-grid">
-        <div>
-          <div class="brand-plate" style="margin-bottom:8px">
-            <img src="assets/inscope_logo.png" alt="" onerror="this.style.display='none'">
-            <span class="brand-text">InScopeI1</span>
-          </div>
-          <p class="meta">A student-led bilingual language exchange at USYD. · 悉尼大学学生双语语言交流。</p>
-        </div>
-        <div>
-          <strong>Explore · 导航</strong>
-          <div><a href="#sessions">Sessions 活动</a></div>
-          <div><a href="#resources">Resources 资源</a></div>
-        </div>
-        <div>
-          <strong>Project · 项目</strong>
-          <div><a href="#how">How it works 使用方式</a></div>
-          <div><a href="#about">About 关于</a></div>
-        </div>
-        <div>
-          <strong>Get in touch · 联系</strong>
-          <div><a href="#join">Join a session 加入活动</a></div>
-          <div><a href="mailto:hello@inscopei1.com.au">hello@inscopei1.com.au</a></div>
-        </div>
+    <div class="footer-grid">
+      <div>
+        <div class="brand-plate footer"><img src="assets/inscope_logo.png" alt=""><span class="brand-text">InScopeI1</span></div>
+        <p>A student-led bilingual exchange at USYD · 悉尼大学学生双语交流。</p>
       </div>
-      <div class="copyright">© <span id="y"></span> InScopeI1. Made with ♥ in Sydney.</div>
+      <div><strong>Explore</strong><div><a href="#sessions">Sessions</a></div><div><a href="#resources">Resources</a></div></div>
+      <div><strong>Project</strong><div><a href="#how">How it works</a></div><div><a href="#about">About</a></div></div>
+      <div><strong>Get in touch</strong><div><a href="https://www.instagram.com/inscope_vibes?igsh=MXo2cnk4ZWl1ZXY=">InScope Team</a></div></div>
     </div>
+    <div class="copyright">© <span id="y"></span> InScopeI1. Made with ♥ in Sydney.</div>
   </footer>
 
-  <!-- ===== Register/Login Modal (front-end only) ===== -->
-  <div class="modal" id="authModal" aria-hidden="true" role="dialog">
-    <div class="modal-card" role="document">
-      <div class="modal-head">
-        <div class="tabs">
-          <button class="tab active" id="tabRegister" type="button">Register 注册</button>
-          <button class="tab" id="tabLogin" type="button">Login 登录</button>
-        </div>
-        <button class="close-x" id="closeAuth" aria-label="Close">×</button>
-      </div>
-      <div class="modal-body">
-        <!-- Register form -->
-        <form id="formRegister" class="form-grid">
-          <input required class="input" type="email" placeholder="Email 邮箱">
-          <input required class="input" type="text" placeholder="ID / Username 用户名">
-          <input required class="input" type="password" placeholder="Password 密码">
-          <button class="btn primary submit" type="submit">Create account 创建账号</button>
-        </form>
-        <!-- Login form -->
-        <form id="formLogin" class="form-grid" style="display:none">
-          <input required class="input" type="email" placeholder="Email 邮箱">
-          <input required class="input" type="password" placeholder="Password 密码">
-          <button class="btn primary submit" type="submit">Sign in 登录</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // Year
     document.getElementById('y').textContent = new Date().getFullYear();
-
-    // Mobile menu
-    const btn = document.getElementById('menuBtn');
-    const mm = document.getElementById('mobileMenu');
-    btn?.addEventListener('click',()=>{mm.style.display = mm.style.display === 'block' ? 'none':'block';});
-
-    // Simple join form feedback
-    document.getElementById('joinForm')?.addEventListener('submit', e=>{
-      e.preventDefault();
-      document.getElementById('joinMsg').textContent = "Thanks! We'll email you the next session link. 感谢，我们会将最新链接发送到你的邮箱。";
-      e.target.reset();
-    });
-
-    // Accordion
-    document.querySelectorAll('.acc-btn')?.forEach(b=>{
-      b.addEventListener('click',()=>{
-        const wrap = b.parentElement.querySelector('.accordion-content');
-        const open = wrap.style.maxHeight && wrap.style.maxHeight !== '0px';
-        wrap.style.maxHeight = open ? '0px' : wrap.scrollHeight + 'px';
-        b.querySelector('span').textContent = open ? '＋' : '－';
-      });
-    });
-
-    // ===== Auth Modal logic =====
-    const authModal = document.getElementById('authModal');
-    const openRegister = document.getElementById('openRegister');
-    const openLogin = document.getElementById('openLogin');
-    const closeAuth = document.getElementById('closeAuth');
-    const tabReg = document.getElementById('tabRegister');
-    const tabLog = document.getElementById('tabLogin');
-    const formReg = document.getElementById('formRegister');
-    const formLog = document.getElementById('formLogin');
-
-    function openModal(mode){
-      authModal.classList.add('active');
-      if(mode==='login'){tabToLogin()} else {tabToRegister()}
-    }
-    function closeModal(){authModal.classList.remove('active')}
-
-    function tabToRegister(){
-      tabReg.classList.add('active'); tabLog.classList.remove('active');
-      formReg.style.display='grid'; formLog.style.display='none';
-    }
-    function tabToLogin(){
-      tabLog.classList.add('active'); tabReg.classList.remove('active');
-      formReg.style.display='none'; formLog.style.display='grid';
-    }
-
-    openRegister?.addEventListener('click',()=>openModal('register'));
-    openLogin?.addEventListener('click',()=>openModal('login'));
-    closeAuth?.addEventListener('click',closeModal);
-    authModal?.addEventListener('click',e=>{ if(e.target===authModal) closeModal(); });
-
-    tabReg?.addEventListener('click',tabToRegister);
-    tabLog?.addEventListener('click',tabToLogin);
-
-    // Fake submit handlers (front-end only)
-    formReg?.addEventListener('submit',e=>{e.preventDefault(); alert('Registered (front-end demo). 后端稍后接入。'); closeModal();});
-    formLog?.addEventListener('submit',e=>{e.preventDefault(); alert('Logged in (front-end demo). 后端稍后接入。'); closeModal();});
-
-    // ===== How to add fun images dynamically (optional example) =====
-    // Example function: call addGalleryItem('assets/images/my.jpg','说明') to append.
-    window.addGalleryItem = function(src, caption){
-      const g = document.getElementById('galleryGrid');
-      const div = document.createElement('div');
-      div.className='card';
-      div.innerHTML = `<img src="${src}" alt="user image"><p class="meta">${caption||''}</p>`;
-      g.appendChild(div);
-    }
   </script>
 </body>
 </html>
