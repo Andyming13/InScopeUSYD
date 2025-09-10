@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InScope – Language Exchange @ USYD</title>
+  <meta name="description" content="InScope – A friendly, student‑led language exchange community at USYD. Join sessions, volunteer, and explore resources." />
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root{
+      --brand-700:#0B4C8C; /* deep navy */
+      --brand-600:#1167B1; /* primary blue */
+      --brand-500:#1C86D1; /* light primary */
+      --brand-400:#47A3E5; /* accents */
+      --brand-200:#D6ECFF; /* pale tint */
+      --accent:#FFC83D;    /* warm accent for CTAs */
+      --ink:#0F172A;       /* text */
+      --muted:#475569;     /* secondary text */
+      --bg:#F8FAFF;        /* page bg */
+      --card:#FFFFFF;      /* cards */
+      --radius:16px;
+      --shadow:0 10px 24px rgba(16,24,40,.08);
+    }
+    html{scroll-behavior:smooth}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";color:var(--ink);background:var(--bg);}
+    a{color:var(--brand-600);text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+
+    .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.84);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid #eef2ff}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand img{height:36px;width:auto}
+    .brand span{font-weight:800;letter-spacing:.2px;color:var(--brand-700)}
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{font-weight:600;color:#0b2540}
+    .cta{background:var(--accent);color:#1b1600;font-weight:800;padding:10px 14px;border-radius:999px;border:2px solid #ffd66f;box-shadow:var(--shadow)}
+    .hamburger{display:none;background:none;border:none;font-size:22px}
+
+    @media (max-width:850px){
+      .menu{display:none}
+      .hamburger{display:block}
+      .mobile-menu{display:none;position:absolute;left:0;right:0;top:60px;background:white;border-bottom:1px solid #eef2ff}
+      .mobile-menu a{display:block;padding:14px 20px;border-top:1px solid #f1f5f9}
+    }
+
+    .hero{position:relative;overflow:hidden}
+    .hero::before{content:"";position:absolute;inset:-40% -20% 0 -20%;background:radial-gradient(1200px 600px at 50% -10%, var(--brand-400), transparent), linear-gradient(160deg, var(--brand-600), var(--brand-700));opacity:.12}
+    .hero .wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;padding:68px 0}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:var(--brand-200);color:var(--brand-700);padding:6px 10px;border-radius:999px;font-weight:700}
+    h1{font-size:42px;line-height:1.1;margin:14px 0 12px}
+    .lead{font-size:18px;color:var(--muted);max-width:52ch}
+    .actions{display:flex;gap:12px;margin-top:18px}
+    .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:12px 16px;font-weight:800;border:2px solid transparent}
+    .btn.primary{background:var(--brand-600);color:white;border-color:var(--brand-700)}
+    .btn.secondary{background:white;border-color:#e2e8f0;color:var(--brand-700)}
+
+    .hero-card{background:linear-gradient(180deg, white, #f7fbff);border:1px solid #e6f0ff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .hero-card h3{margin:0 0 10px}
+    .chip{display:inline-block;padding:6px 10px;background:#f1f5f9;border-radius:999px;font-size:12px;margin:4px 6px 0 0}
+    @media (max-width:850px){.hero .wrap{grid-template-columns:1fr} h1{font-size:34px}}
+
+    /* NEW: playful illustration inspired by your poster */
+    .people-scene{background:linear-gradient(180deg, #f7fbff, #ffffff);border:1px solid #e6f0ff;border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;position:relative;margin-bottom:14px}
+    .people-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+    .avatar{position:relative;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;border:3px solid #fff;box-shadow:0 6px 16px rgba(17,103,177,.25)}
+    .avatar.f1{background:#F4A261}
+    .avatar.f2{background:#8D5524}
+    .avatar.f3{background:#F1C27D}
+    .avatar.f4{background:#C68642}
+    .avatar .eyes{position:absolute;top:28px;left:18px;width:28px;height:8px;border-radius:8px;background:rgba(0,0,0,.25)}
+    .avatar .smile{position:absolute;top:38px;left:22px;width:20px;height:10px;border-bottom:3px solid rgba(0,0,0,.35);border-radius:0 0 16px 16px}
+    .shirt{position:absolute;bottom:-2px;left:0;right:0;height:24px;border-radius:0 0 999px 999px}
+    .shirt.s1{background:var(--brand-600)}
+    .shirt.s2{background:#e11d48}
+    .shirt.s3{background:#22c55e}
+    .shirt.s4{background:#7c3aed}
+    .bubble{position:absolute;background:white;border:2px solid #e6eefc;border-radius:14px;padding:8px 10px;font-size:12px;box-shadow:var(--shadow)}
+    .bubble:after{content:"";position:absolute;left:14px;bottom:-10px;border:6px solid transparent;border-top-color:#e6eefc}
+    .flag{position:absolute;right:-6px;top:-6px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;padding:2px;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+    .flag img{width:18px;height:12px;display:block}
+    @media (max-width:850px){.avatar{width:56px;height:56px}}
+
+    section{padding:60px 0}
+    .section-title{font-size:28px;margin:0 0 10px}
+    .section-sub{color:var(--muted);margin:0 0 28px}
+
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(3,1fr)}
+    @media (max-width:950px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    .card{background:var(--card);border:1px solid #e5e7eb;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+    .card h4{margin:.3rem 0 .2rem}
+    .meta{color:var(--muted);font-size:14px}
+
+    .steps{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
+    .step{background:white;border:1px dashed #cfe4ff;border-radius:var(--radius);padding:18px}
+    .step-num{font-weight:900;color:var(--brand-600);font-size:13px}
+    .step h5{font-size:18px;margin:4px 0}
+    @media (max-width:900px){.steps{grid-template-columns:1fr}}
+
+    .accordion-item{border:1px solid #e5e7eb;border-radius:12px;margin-bottom:10px;background:white}
+    .accordion-item button{width:100%;text-align:left;background:none;border:0;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+    .accordion-content{max-height:0;overflow:hidden;transition:max-height .3s ease}
+    .accordion-content-inner{padding:0 16px 16px;color:var(--muted)}
+
+    footer{background:linear-gradient(180deg, #f3f7ff, #ffffff);border-top:1px solid #e6eefc}
+    .footer-grid{display:grid;gap:18px;grid-template-columns:2fr 1fr 1fr 1fr}
+    .footer-grid a{color:#334155}
+    .copyright{font-size:13px;color:#6b7280;margin-top:20px}
+    @media (max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" aria-label="InScope Home">
+        <img src="assets/inscope-logo.png" alt="InScope logo" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+        <span style="display:none">InScope</span>
+      </a>
+      <div class="menu" aria-label="Primary">
+        <a href="#sessions">Sessions</a>
+        <a href="#how">How It Works</a>
+        <a href="#team">Team</a>
+        <a href="#resources">Resources</a>
+        <a href="#volunteer">Volunteer</a>
+        <a href="#feedback">Feedback</a>
+        <a href="#about">About</a>
+        <a class="cta" href="#join">Join a Session</a>
+      </div>
+      <button class="hamburger" aria-label="Open menu" id="menuBtn">☰</button>
+    </div>
+    <div class="mobile-menu container" id="mobileMenu">
+      <a href="#sessions">Sessions</a>
+      <a href="#how">How It Works</a>
+      <a href="#team">Team</a>
+      <a href="#resources">Resources</a>
+      <a href="#volunteer">Volunteer</a>
+      <a href="#feedback">Feedback</a>
+      <a href="#about">About</a>
+      <a href="#join"><strong>➜ Join a Session</strong></a>
+    </div>
+  </nav>
+
+  <header id="home" class="hero">
+    <div class="container wrap">
+      <div>
+        <span class="badge">🌍 International Mother Language spirit</span>
+        <h1>Practice languages, meet friends, and build bridges across cultures.</h1>
+        <p class="lead">InScope is a student‑led language exchange at USYD. Join guided sessions, share your mother tongue, and learn from others in a safe, welcoming space.</p>
+        <div class="actions">
+          <a class="btn primary" href="#join">Join a Session</a>
+          <a class="btn secondary" href="#volunteer">Become a Volunteer</a>
+        </div>
+        <div style="margin-top:14px" class="meta">Theme colours follow your logo – deep & light blues with a warm yellow accent.</div>
+      </div>
+      <div>
+        <!-- NEW playful illustration block -->
+        <div class="people-scene" aria-label="Diverse language learners illustration">
+          <div class="people-row">
+            <div class="avatar f1"><span class="eyes"></span><span class="smile"></span><span class="shirt s1"></span><span class="flag"><img alt="USA" src="https://flagcdn.com/us.svg" /></span></div>
+            <div class="avatar f2"><span class="eyes"></span><span class="smile"></span><span class="shirt s2"></span><span class="flag"><img alt="China" src="https://flagcdn.com/cn.svg" /></span></div>
+            <div class="avatar f3"><span class="eyes"></span><span class="smile"></span><span class="shirt s3"></span><span class="flag"><img alt="Japan" src="https://flagcdn.com/jp.svg" /></span></div>
+            <div class="avatar f4"><span class="eyes"></span><span class="smile"></span><span class="shirt s4"></span><span class="flag"><img alt="France" src="https://flagcdn.com/fr.svg" /></span></div>
+            <div class="avatar f3"><span class="eyes"></span><span class="smile"></span><span class="shirt s2"></span><span class="flag"><img alt="Spain" src="https://flagcdn.com/es.svg" /></span></div>
+          </div>
+          <div class="bubble" style="left:12px;top:8px">Hello! 你好！こんにちは！</div>
+          <div class="bubble" style="right:12px;top:54px">Let’s practice together ✨</div>
+        </div>
+
+        <aside class="hero-card">
+          <h3>Next session highlights</h3>
+          <div class="meta">Thursday, 5:30–7:00pm · Fisher Library, Level 3</div>
+          <div style="margin:12px 0 8px">
+            <span class="chip">🇨🇳 Mandarin</span>
+            <span class="chip">🇯🇵 Japanese</span>
+            <span class="chip">🇫🇷 French</span>
+            <span class="chip">🇪🇸 Spanish</span>
+          </div>
+          <a class="btn primary" href="#join" style="margin-top:8px">Reserve a spot</a>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <section id="how" class="container">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-sub">Simple, structured, and social. Sessions run weekly during term.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">Step 1</div><h5>Pick a language table</h5><p class="meta">Choose your target language and level. Hosts guide small‑group conversation.</p></div>
+      <div class="step"><div class="step-num">Step 2</div><h5>Share & practice</h5><p class="meta">Short prompts, role‑plays, and games keep it fun and inclusive.</p></div>
+      <div class="step"><div class="step-num">Step 3</div><h5>Reflect & connect</h5><p class="meta">Exchange tips, get resources, and make friends from around the world.</p></div>
+    </div>
+  </section>
+
+  <section id="sessions" class="container">
+    <h2 class="section-title">Upcoming Sessions</h2>
+    <p class="section-sub">Reserve a seat – spaces are limited to keep groups small.</p>
+    <div class="grid">
+      <article class="card"><div class="meta">Week 4 · Thu 5:30–7:00pm</div><h4>Conversation Night – Beginner Tables</h4><p class="meta">Mandarin · Japanese · French</p><a class="btn secondary" href="#join">RSVP</a></article>
+      <article class="card"><div class="meta">Week 5 · Thu 5:30–7:00pm</div><h4>Games & Role‑play</h4><p class="meta">Spanish · Korean · German</p><a class="btn secondary" href="#join">RSVP</a></article>
+      <article class="card"><div class="meta">Week 6 · Sat 2:00–3:30pm</div><h4>Coffee & Languages (USU pop‑up)</h4><p class="meta">All languages · Social</p><a class="btn secondary" href="#join">RSVP</a></article>
+    </div>
+  </section>
+
+  <section id="resources" class="container">
+    <h2 class="section-title">Resources</h2>
+    <p class="section-sub">Curated links to help you keep learning between sessions.</p>
+    <div class="grid">
+      <div class="card"><h4>Pronunciation decks</h4><p class="meta">Anki & Quizlet sets shared by volunteers.</p><a class="btn secondary" href="#">Open</a></div>
+      <div class="card"><h4>Conversation prompts</h4><p class="meta">Download printable topic cards.</p><a class="btn secondary" href="#">Download</a></div>
+      <div class="card"><h4>Community groups</h4><p class="meta">USYD clubs, Discords, and local meetups.</p><a class="btn secondary" href="#">Explore</a></div>
+    </div>
+  </section>
+
+  <section id="team" class="container">
+    <h2 class="section-title">Team</h2>
+    <p class="section-sub">Student hosts & coordinators who make InScope possible.</p>
+    <div class="grid">
+      <div class="card"><h4>Session Hosts</h4><p class="meta">Friendly leaders trained to run inclusive tables.</p></div>
+      <div class="card"><h4>Program Coordinators</h4><p class="meta">Scheduling, partnerships, and resources.</p></div>
+      <div class="card"><h4>Advisors</h4><p class="meta">Staff & alumni supporting pedagogy and events.</p></div>
+    </div>
+  </section>
+
+  <section id="volunteer" class="container">
+    <h2 class="section-title">Volunteer</h2>
+    <p class="section-sub">Host a table or help run events – training provided.</p>
+    <div class="card">
+      <h4>Volunteer Sign‑up</h4>
+      <form id="volForm">
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <label>Name<br><input required name="name" placeholder="Your name" style="width:100%;padding:10px;border-radius:10px;border:1px solid #cbd5e1"></label>
+          <label>Email<br><input required type="email" name="email" placeholder="you@uni.sydney.edu.au" style="width:100%;padding:10px;border-radius:10px;border:1px solid #cbd5e1"></label>
+        </div>
+        <label style="display:block;margin-top:10px">Languages you can host<br>
+          <input name="langs" placeholder="e.g., Mandarin (intermediate), Japanese (beginner)" style="width:100%;padding:10px;border-radius:10px;border:1px solid #cbd5e1">
+        </label>
+        <button class="btn primary" type="submit" style="margin-top:12px">Send</button>
+        <span id="volMsg" class="meta" style="margin-left:10px"></span>
+      </form>
+    </div>
+  </section>
+
+  <section id="feedback" class="container">
+    <h2 class="section-title">Feedback & Certificates</h2>
+    <p class="section-sub">Tell us how we did – we love shout‑outs and suggestions.</p>
+    <div class="accordion-item">
+      <button type="button" class="acc-btn">What happens in a typical 90‑minute session? <span>＋</span></button>
+      <div class="accordion-content"><div class="accordion-content-inner">10 min icebreakers · 60 min guided practice · 15 min social · 5 min wrap‑up & resources.</div></div>
+    </div>
+    <div class="accordion-item">
+      <button type="button" class="acc-btn">Can I get a volunteer certificate? <span>＋</span></button>
+      <div class="accordion-content"><div class="accordion-content-inner">Yes – volunteers who host for 4+ sessions per semester receive a certificate of contribution.</div></div>
+    </div>
+  </section>
+
+  <section id="about" class="container">
+    <h2 class="section-title">About the Project</h2>
+    <p class="section-sub">InScope is a not‑for‑profit, student‑run initiative at the University of Sydney that celebrates International Mother Language Day values year‑round.</p>
+    <div class="card"><p>We believe language is a bridge between cultures. By embracing the diversity of languages, we open up new avenues for understanding and collaboration.</p></div>
+  </section>
+
+  <section id="join" class="container">
+    <h2 class="section-title">Reserve Your Spot</h2>
+    <p class="section-sub">Drop your email and we’ll send you the next session link.</p>
+    <form id="joinForm" class="card">
+      <div class="grid" style="grid-template-columns:2fr 1fr">
+        <input required type="email" placeholder="you@uni.sydney.edu.au" style="width:100%;padding:12px;border-radius:10px;border:1px solid #cbd5e1">
+        <button class="btn primary" type="submit">Notify me</button>
+      </div>
+      <div id="joinMsg" class="meta" style="margin-top:8px"></div>
+    </form>
+  </section>
+
+  <footer>
+    <div class="container" style="padding:36px 0">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom:8px">
+            <img src="assets/inscope-logo.png" alt="" onerror="this.style.display='none'">
+            <span>InScope</span>
+          </div>
+          <p class="meta">A student‑led language exchange community at USYD.</p>
+        </div>
+        <div>
+          <strong>Explore</strong>
+          <div><a href="#sessions">Sessions</a></div>
+          <div><a href="#resources">Resources</a></div>
+          <div><a href="#volunteer">Volunteer</a></div>
+        </div>
+        <div>
+          <strong>Project</strong>
+          <div><a href="#how">How it works</a></div>
+          <div><a href="#feedback">Feedback</a></div>
+          <div><a href="#about">About</a></div>
+        </div>
+        <div>
+          <strong>Get in touch</strong>
+          <div><a href="#join">Join a session</a></div>
+          <div><a href="mailto:hello@inscopeusyd.au">hello@inscopeusyd.au</a></div>
+        </div>
+      </div>
+      <div class="copyright">© <span id="y"></span> InScope. Made with ♥ in Sydney. Domain idea: <code>inscopeusyd.au</code></div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+    const btn = document.getElementById('menuBtn');
+    const mm = document.getElementById('mobileMenu');
+    btn?.addEventListener('click',()=>{mm.style.display = mm.style.display === 'block' ? 'none':'block';});
+    document.getElementById('joinForm')?.addEventListener('submit', e=>{e.preventDefault();document.getElementById('joinMsg').textContent = 'Thanks! We\'ll email you the next session link.';e.target.reset();});
+    document.getElementById('volForm')?.addEventListener('submit', e=>{e.preventDefault();document.getElementById('volMsg').textContent = 'Thanks for volunteering! We\'ll be in touch.';e.target.reset();});
+    document.querySelectorAll('.acc-btn').forEach(btn=>{btn.addEventListener('click',()=>{const wrap = btn.parentElement.querySelector('.accordion-content');const open = wrap.style.maxHeight && wrap.style.maxHeight !== '0px';wrap.style.maxHeight = open ? '0px' : wrap.scrollHeight + 'px';btn.querySelector('span').textContent = open ? '＋' : '－';});});
+  </script>
+</body>
+</html>
