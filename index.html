@@ -40,7 +40,6 @@
       color:#fff;
       text-align:left;
       background: url("assets/BG1.png") center bottom / contain no-repeat;
-      /* 给一个深蓝底色，避免宽屏两侧空白突兀 */
       background-color:#fff;
       min-height:78vh;
     }
@@ -49,7 +48,7 @@
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
-      padding: 230px 20px 100px;
+      padding: 200px 20px 100px;
     }
     .hero-logo-plate{display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:10px 14px;box-shadow:var(--shadow)}
     .hero-logo-plate img{height:80px}
@@ -66,10 +65,7 @@
     .btn{display:inline-flex;align-items:center;gap:6px;padding:12px 18px;border-radius:999px;font-weight:700;border:2px solid transparent;cursor:pointer}
     .btn.primary{background:#fff;color:#1E3AFF;border-color:#dbeafe}
     .btn.outline{background:rgba(30,58,138,0.85);color:#fff;border:2px solid #1E3AFF}
-    .btn.outline:hover {
-      background: #1E3AFF;
-      border-color: #1E3AFF;
-    }
+    .btn.outline:hover { background:#1E3AFF; border-color:#1E3AFF; }
 
     /* ===== Section base ===== */
     section{padding:60px 20px}
@@ -79,7 +75,7 @@
     .badge-key{display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border:1px solid #e5e7eb;border-radius:6px;background:#fff;box-shadow:var(--shadow)}
     .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
-    .meta{color:var(--muted);font-size:14px}
+    .meta{color:#64748b;font-size:14px}
 
     /* ===== 带左侧图片的版式 ===== */
     .section-wrap{
@@ -89,7 +85,7 @@
       align-items:start;
     }
     .section-img{
-      background:#0c3b82; /* 与图片边缘颜色接近，过渡友好 */
+      background:#0c3b82;
       border-radius:16px;
       overflow:hidden;
       border:1px solid #e5e7eb;
@@ -107,6 +103,22 @@
       .footer-grid{grid-template-columns:1fr 1fr}
       .section-wrap{grid-template-columns:1fr}
     }
+
+    /* ====== Auth Modals ====== */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:1000}
+    .modal{width:min(520px,90vw);background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:22px}
+    .modal h3{margin:0 0 10px;font-size:20px}
+    .modal .row{display:flex;gap:10px;margin:10px 0}
+    .modal input{flex:1;padding:10px;border:1px solid #d1d5db;border-radius:10px;font-size:14px}
+    .modal button{padding:10px 14px;border-radius:10px;border:1px solid #1E3AFF;background:#1E3AFF;color:#fff;font-weight:700;cursor:pointer}
+    .modal .ghost{background:#fff;color:#1E3AFF}
+    .modal .msg{font-size:13px;color:#475569;min-height:20px;margin-top:4px}
+    .modal .link{font-size:13px;color:#2563eb;cursor:pointer}
+    .auth-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;color:#0f172a;margin-left:10px}
+
+    /* 密码要求高亮 */
+    #pwd-req-list li{color:#64748b}
+    #pwd-req-list li.ok{color:#059669;font-weight:600}
   </style>
 </head>
 <body>
@@ -132,8 +144,8 @@
       <h1>Practice languages in English & Chinese · 中英双语交流</h1>
       <div class="actions">
         <a class="btn primary" href="#sessions">Join a Session 参加活动</a>
-        <button class="btn outline">Register 注册</button>
-        <button class="btn outline">Login 登录</button>
+        <button class="btn outline" id="btn-hero-register">Register 注册</button>
+        <button class="btn outline" id="btn-hero-login">Login 登录</button>
       </div>
     </div>
   </header>
@@ -216,8 +228,322 @@
     <div class="copyright">© <span id="y"></span> InScope. Made with ♥ in Sydney.</div>
   </footer>
 
+  <!-- ===== Auth Modals ===== -->
+  <div id="modal-register" class="modal-overlay" aria-hidden="true">
+    <div class="modal">
+      <h3>Register · 注册</h3>
+      <div id="reg-step-1">
+        <div class="row"><input id="reg-email" type="email" placeholder="Email 邮箱" /></div>
+        <div class="row">
+          <button id="btn-send-code">Send code 发送验证码</button>
+          <button class="ghost" data-close>Cancel 取消</button>
+        </div>
+        <div class="msg" id="reg-msg-1"></div>
+      </div>
+      <div id="reg-step-2" style="display:none">
+        <div class="row"><input id="reg-code" inputmode="numeric" maxlength="6" placeholder="6-digit code 六位验证码" /></div>
+        <div class="row">
+          <button id="btn-verify-code">Verify 验证</button>
+          <button class="ghost" data-back>Back 返回</button>
+        </div>
+        <div class="msg" id="reg-msg-2"></div>
+      </div>
+      <div id="reg-step-3" style="display:none">
+        <div class="row"><input id="reg-username" placeholder="Username 用户名" /></div>
+        <div class="row"><input id="reg-password" type="password" placeholder="Password 密码（至少8位，含大小写/数字/符号）" /></div>
+
+        <!-- 密码要求提示 -->
+        <div class="msg" id="pwd-req" style="line-height:1.4">
+          <div><strong>密码要求 · Password must include:</strong></div>
+          <ul id="pwd-req-list" style="margin:6px 0 0 16px;padding:0;">
+            <li data-req="len">≥ 8 个字符</li>
+            <li data-req="upper">至少 1 个大写字母</li>
+            <li data-req="lower">至少 1 个小写字母</li>
+            <li data-req="digit">至少 1 个数字</li>
+            <li data-req="symbol">至少 1 个符号（!@#$%^&* 等）</li>
+            <li data-req="noemail">不能包含邮箱前缀（@ 前文本）</li>
+            <li data-req="nouser">不能包含用户名</li>
+          </ul>
+        </div>
+
+        <div class="row">
+          <button id="btn-register" disabled>Create account 创建账号</button>
+          <button class="ghost" data-close>Close 关闭</button>
+        </div>
+        <div class="msg" id="reg-msg-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-login" class="modal-overlay" aria-hidden="true">
+    <div class="modal">
+      <h3>Login · 登录</h3>
+      <div class="row"><input id="login-email" type="email" placeholder="Email 邮箱" /></div>
+      <div class="row"><input id="login-password" type="password" placeholder="Password 密码" /></div>
+      <div class="row">
+        <button id="btn-login">Login 登录</button>
+        <button class="ghost" data-close>Cancel 取消</button>
+      </div>
+      <div class="msg" id="login-msg"></div>
+    </div>
+  </div>
+  <!-- ===== /Auth Modals ===== -->
+
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
   </script>
+
+  <!-- ===== Auth Script ===== -->
+  <script>
+  (() => {
+    // ====== 1) 配置：本地调试 / 上线切换 ======
+    const API_BASE = 'http://localhost:8787'; // 部署后改成你的云端后端地址
+    const JSON_HEADERS = {'Content-Type':'application/json'};
+
+    // ====== 2) 状态 & 小工具 ======
+    let accessToken = null; // 简单起见放内存；生产可存 localStorage 并做过期处理
+
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const show = el => { el.style.display='flex'; el.setAttribute('aria-hidden','false'); };
+    const hide = el => { el.style.display='none'; el.setAttribute('aria-hidden','true'); };
+
+    // 首页 Register / Login 按钮引用 + 显隐控制
+    const heroBtnRegister = document.getElementById('btn-hero-register');
+    const heroBtnLogin = document.getElementById('btn-hero-login');
+    function updateHeroButtons(loggedIn) {
+      if (heroBtnRegister) heroBtnRegister.style.display = loggedIn ? 'none' : '';
+      if (heroBtnLogin) heroBtnLogin.style.display = loggedIn ? 'none' : '';
+    }
+
+    async function apiPost(path, body, { withAuth=false, withCookie=false } = {}) {
+      const headers = { ...JSON_HEADERS };
+      if (withAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+      const res = await fetch(`${API_BASE}${path}`, {
+        method:'POST',
+        headers,
+        body: JSON.stringify(body || {}),
+        credentials: withCookie ? 'include' : 'omit' // refresh/logout 需要 Cookie
+      });
+      if (res.status === 401 && withAuth) {
+        const ok = await tryRefresh();
+        if (ok) return apiPost(path, body, { withAuth:true, withCookie });
+      }
+      const json = await res.json().catch(()=>({}));
+      return { status: res.status, json };
+    }
+
+    async function apiGet(path, { withAuth=false } = {}) {
+      const headers = {};
+      if (withAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+      const res = await fetch(`${API_BASE}${path}`, { headers });
+      if (res.status === 401 && withAuth) {
+        const ok = await tryRefresh();
+        if (ok) return apiGet(path, { withAuth:true });
+      }
+      const json = await res.json().catch(()=>({}));
+      return { status: res.status, json };
+    }
+
+    async function tryRefresh() {
+      const res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
+        method:'POST',
+        credentials:'include',
+        headers: JSON_HEADERS
+      });
+      if (res.ok) {
+        const data = await res.json();
+        accessToken = data.access_token;
+        renderAuthChip(data.user);
+        return true;
+      }
+      return false;
+    }
+
+    function renderAuthChip(user) {
+      const plate = document.querySelector('.brand-plate');
+      if (!plate) return;
+
+      const old = document.getElementById('auth-chip');
+      if (old) old.remove();
+
+      const chip = document.createElement('span');
+      chip.id = 'auth-chip';
+      chip.className = 'auth-chip';
+      chip.innerHTML = user
+        ? `👋 ${user.username} <span class="link" id="btn-logout">Logout 退出</span>`
+        : `<span class="link" id="btn-open-login">Login 登录</span> · <span class="link" id="btn-open-register">Register 注册</span>`;
+      plate.insertAdjacentElement('afterend', chip);
+
+      const bl = document.getElementById('btn-open-login');
+      const br = document.getElementById('btn-open-register');
+      const lo = document.getElementById('btn-logout');
+      if (bl) bl.onclick = () => show($('#modal-login'));
+      if (br) br.onclick = () => show($('#modal-register'));
+      if (lo) lo.onclick = onLogout;
+
+      // 新增：根据是否登录，隐藏/显示首页按钮
+      updateHeroButtons(!!user);
+    }
+
+    // ====== 3) 绑定页面现有按钮（Hero按钮 + 文本包含“注册/登录”的） ======
+    heroBtnRegister?.addEventListener('click', e => { e.preventDefault?.(); show($('#modal-register')); });
+    heroBtnLogin?.addEventListener('click', e => { e.preventDefault?.(); show($('#modal-login')); });
+    const btnsOpenReg = Array.from(document.querySelectorAll('button, a')).filter(el => /注册|Register/i.test(el.textContent || ''));
+    const btnsOpenLogin = Array.from(document.querySelectorAll('button, a')).filter(el => /登录|Login/i.test(el.textContent || ''));
+    btnsOpenReg.forEach(el => el.addEventListener('click', e => { e.preventDefault?.(); show($('#modal-register')); }));
+    btnsOpenLogin.forEach(el => el.addEventListener('click', e => { e.preventDefault?.(); show($('#modal-login')); }));
+
+    // 通用：关闭/返回
+    document.querySelectorAll('[data-close]').forEach(el => el.onclick = () => {
+      hide($('#modal-register')); hide($('#modal-login'));
+      // 重置表单
+      $('#reg-step-1').style.display='block';
+      $('#reg-step-2').style.display='none';
+      $('#reg-step-3').style.display='none';
+      $('#reg-msg-1').textContent = $('#reg-msg-2').textContent = $('#reg-msg-3').textContent = '';
+      $('#reg-email').value = $('#reg-code').value = $('#reg-username').value = $('#reg-password').value = '';
+      $('#login-msg').textContent = '';
+    });
+    document.querySelectorAll('[data-back]').forEach(el => el.onclick = () => {
+      $('#reg-step-2').style.display='none';
+      $('#reg-step-1').style.display='block';
+      $('#reg-msg-1').textContent='';
+    });
+
+    // ====== 4) 注册流程 ======
+    let registrationToken = null;
+
+    $('#btn-send-code').onclick = async () => {
+      const email = $('#reg-email').value.trim();
+      $('#reg-msg-1').textContent = '发送中… / Sending…';
+      const { status, json } = await apiPost('/api/v1/auth/request-code', { email });
+      if (status === 200 && json.ok) {
+        $('#reg-msg-1').textContent = '已发送验证码，请查收（本地模式看服务端日志）。';
+        $('#reg-step-1').style.display='none';
+        $('#reg-step-2').style.display='block';
+        $('#reg-code').focus();
+      } else {
+        $('#reg-msg-1').textContent = json.message || '发送失败，请稍后再试。';
+      }
+    };
+
+    $('#btn-verify-code').onclick = async () => {
+      const email = $('#reg-email').value.trim();
+      const code  = $('#reg-code').value.trim();
+      $('#reg-msg-2').textContent = '验证中… / Verifying…';
+      const { status, json } = await apiPost('/api/v1/auth/verify-code', { email, code });
+      if (status === 200 && json.ok) {
+        registrationToken = json.registration_token;
+        $('#reg-msg-2').textContent = '验证成功，请设置用户名与密码。';
+        $('#reg-step-2').style.display='none';
+        $('#reg-step-3').style.display='block';
+        $('#reg-username').focus();
+      } else {
+        $('#reg-msg-2').textContent = json.message || '验证码错误或已过期。';
+      }
+    };
+
+    // ===== 密码实时校验（注册第三步） =====
+    const pwdInput = document.getElementById('reg-password');
+    const userInput = document.getElementById('reg-username');
+    const emailInput = document.getElementById('reg-email');
+    const btnCreate = document.getElementById('btn-register');
+
+    function evaluatePassword() {
+      const pwd = (pwdInput?.value || '');
+      const username = (userInput?.value || '').trim().toLowerCase();
+      const email = (emailInput?.value || '').trim().toLowerCase();
+      const emailPrefix = email.split('@')[0] || '';
+
+      const checks = {
+        len:    pwd.length >= 8,
+        upper:  /[A-Z]/.test(pwd),
+        lower:  /[a-z]/.test(pwd),
+        digit:  /\d/.test(pwd),
+        symbol: /[^A-Za-z0-9]/.test(pwd),
+        noemail: emailPrefix ? !pwd.toLowerCase().includes(emailPrefix) : true,
+        nouser: username ? !pwd.toLowerCase().includes(username) : true,
+      };
+
+      const list = document.querySelectorAll('#pwd-req-list li');
+      list.forEach(li => {
+        const key = li.getAttribute('data-req');
+        li.classList.toggle('ok', !!checks[key]);
+      });
+
+      const allOk = Object.values(checks).every(Boolean);
+      if (btnCreate) btnCreate.disabled = !allOk;
+    }
+
+    ['input','change'].forEach(evt => {
+      pwdInput?.addEventListener(evt, evaluatePassword);
+      userInput?.addEventListener(evt, evaluatePassword);
+      emailInput?.addEventListener(evt, evaluatePassword);
+    });
+
+    const step3 = document.getElementById('reg-step-3');
+    const observer = new MutationObserver(() => {
+      if (step3 && step3.style.display !== 'none') {
+        evaluatePassword();
+      }
+    });
+    observer.observe(step3, { attributes:true, attributeFilter:['style'] });
+
+    $('#btn-register').onclick = async () => {
+      const username = $('#reg-username').value.trim();
+      const password = $('#reg-password').value;
+      if (!registrationToken) { $('#reg-msg-3').textContent = '请先完成邮箱验证。'; return; }
+      $('#reg-msg-3').textContent = '创建中… / Creating…';
+      const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
+        method:'POST',
+        headers: { ...JSON_HEADERS, Authorization: `Bearer ${registrationToken}` },
+        credentials: 'include',
+        body: JSON.stringify({ username, password })
+      });
+      const json = await res.json().catch(()=>({}));
+      if (res.ok && json.ok) {
+        accessToken = json.access_token;
+        $('#reg-msg-3').textContent = '注册成功！已登录。';
+        renderAuthChip(json.user);   // 会自动隐藏首页按钮
+        setTimeout(() => { hide($('#modal-register')); }, 600);
+      } else {
+        $('#reg-msg-3').textContent = (json && (json.message || json.code)) || '注册失败。';
+      }
+    };
+
+    // ====== 5) 登录 / 退出 ======
+    $('#btn-login').onclick = async () => {
+      const email = $('#login-email').value.trim();
+      const password = $('#login-password').value;
+      $('#login-msg').textContent = '登录中… / Logging in…';
+      const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+        method:'POST',
+        headers: JSON_HEADERS,
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      });
+      const json = await res.json().catch(()=>({}));
+      if (res.ok && json.ok) {
+        accessToken = json.access_token;
+        $('#login-msg').textContent = '登录成功！';
+        renderAuthChip(json.user);   // 会自动隐藏首页按钮
+        setTimeout(() => { hide($('#modal-login')); }, 400);
+      } else {
+        $('#login-msg').textContent = (json && (json.message || json.code)) || '登录失败。';
+      }
+    };
+
+    async function onLogout() {
+      await apiPost('/api/v1/auth/logout', {}, { withCookie:true });
+      accessToken = null;
+      renderAuthChip(null);     // 恢复显示首页按钮
+    }
+
+    // 页面初始化
+    renderAuthChip(null);
+    updateHeroButtons(false);
+  })();
+  </script>
+  <!-- ===== /Auth Script ===== -->
 </body>
 </html>
