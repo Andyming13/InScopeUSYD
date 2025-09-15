@@ -1,0 +1,30 @@
+{
+  "name": "inscope-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "src/server.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "dev:insecure": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 nodemon src/server.js",
+    "start": "node src/server.js",
+    "db:init": "node scripts/db-init.js"
+  },
+  "dependencies": {
+    "argon2": "^0.41.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
+    "zod": "^4.1.8"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.10"
+  }
+}
