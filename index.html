@@ -20,6 +20,7 @@
     }
     body{margin:0;font-family:ui-sans-serif,system-ui;line-height:1.6;background:#f3f6fb}
     a{text-decoration:none}
+
     .nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid #e5e7eb}
     .nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:10px 20px}
     .brand-plate{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:4px 10px;box-shadow:var(--shadow)}
@@ -263,18 +264,28 @@
     async function apiPost(path, body, { withAuth=false, withCookie=false } = {}) {
       const headers = { ...JSON_HEADERS };
       if (withAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
-      const res = await fetch(`${API_BASE}${path}`, {
-        method:'POST', headers, body: JSON.stringify(body || {}),
-        credentials: withCookie ? 'include' : 'omit'
-      });
-      const json = await res.json().catch(()=>({}));
+      let res, json;
+      try {
+        res = await fetch(`${API_BASE}${path}`, {
+          method:'POST', headers, body: JSON.stringify(body || {}),
+          credentials: withCookie ? 'include' : 'omit'
+        });
+        json = await res.json().catch(()=>({}));
+      } catch (e) {
+        return { status: 0, json: { ok:false, message:'网络异常或后端暂不可用' } };
+      }
       return { status: res.status, json };
     }
     async function apiGet(path, { withAuth=false } = {}) {
       const headers = {};
       if (withAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
-      const res = await fetch(`${API_BASE}${path}`, { headers });
-      const json = await res.json().catch(()=>({}));
+      let res, json;
+      try {
+        res = await fetch(`${API_BASE}${path}`, { headers });
+        json = await res.json().catch(()=>({}));
+      } catch (e) {
+        return { status: 0, json: { ok:false, message:'网络异常或后端暂不可用' } };
+      }
       return { status: res.status, json };
     }
 
@@ -322,7 +333,7 @@
         document.getElementById('reg-step-2').style.display='block';
         document.getElementById('reg-code').focus();
       } else {
-        document.getElementById('reg-msg-1').textContent = json.message || '发送失败，请稍后再试。';
+        document.getElementById('reg-msg-1').textContent = (json && (json.message || json.code)) || '发送失败，请稍后再试。';
       }
     };
 
@@ -337,11 +348,9 @@
         document.getElementById('reg-step-2').style.display='none';
         document.getElementById('reg-step-3').style.display='block';
         document.getElementById('reg-username').focus();
-
-        // ⭐ 关键：立即刷新按钮可用状态，避免某些环境下 MutationObserver 不触发
-        evaluatePassword();
+        evaluatePassword(); // 立刻刷新密码校验状态
       } else {
-        document.getElementById('reg-msg-2').textContent = json.message || '验证码错误或已过期。';
+        document.getElementById('reg-msg-2').textContent = (json && (json.message || json.code)) || '验证码错误或已过期。';
       }
     };
 
@@ -388,13 +397,19 @@
       const password = document.getElementById('reg-password').value;
       if (!registrationToken) { document.getElementById('reg-msg-3').textContent = '请先完成邮箱验证。'; return; }
       document.getElementById('reg-msg-3').textContent = '创建中… / Creating…';
-      const res = await fetch(`${API_BASE}/api/v1/auth/register`, {
-        method:'POST',
-        headers: { ...JSON_HEADERS, Authorization: `Bearer ${registrationToken}` },
-        credentials: 'include',
-        body: JSON.stringify({ username, password })
-      });
-      const json = await res.json().catch(()=>({}));
+      let res, json;
+      try {
+        res = await fetch(`${API_BASE}/api/v1/auth/register`, {
+          method:'POST',
+          headers: { ...JSON_HEADERS, Authorization: `Bearer ${registrationToken}` },
+          credentials: 'include',
+          body: JSON.stringify({ username, password })
+        });
+        json = await res.json().catch(()=>({}));
+      } catch (e) {
+        document.getElementById('reg-msg-3').textContent = '网络异常，请稍后重试。';
+        return;
+      }
       if (res.ok && json.ok) {
         accessToken = json.access_token;
         document.getElementById('reg-msg-3').textContent = '注册成功！已登录。';
@@ -407,13 +422,18 @@
 
     // ===== 登录 / 刷新 / 登出 =====
     async function tryRefresh() {
-      const res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
-        method:'POST',
-        credentials:'include',
-        headers: JSON_HEADERS
-      });
-      if (res.ok) {
-        const data = await res.json();
+      let res, data;
+      try {
+        res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
+          method:'POST',
+          credentials:'include',
+          headers: JSON_HEADERS
+        });
+        data = await res.json().catch(()=>({}));
+      } catch {
+        return false;
+      }
+      if (res.ok && data?.ok) {
         accessToken = data.access_token;
         renderAuthChip(data.user);
         return true;
@@ -451,13 +471,19 @@
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
       document.getElementById('login-msg').textContent = '登录中… / Logging in…';
-      const res = await fetch(`${API_BASE}/api/v1/auth/login`, {
-        method:'POST',
-        headers: JSON_HEADERS,
-        credentials: 'include',
-        body: JSON.stringify({ email, password })
-      });
-      const json = await res.json().catch(()=>({}));
+      let res, json;
+      try {
+        res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+          method:'POST',
+          headers: JSON_HEADERS,
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+        json = await res.json().catch(()=>({}));
+      } catch (e) {
+        document.getElementById('login-msg').textContent = '网络异常，请稍后重试。';
+        return;
+      }
       if (res.ok && json.ok) {
         accessToken = json.access_token;
         document.getElementById('login-msg').textContent = '登录成功！';
@@ -503,7 +529,7 @@
               btn.textContent = '已报名';
               alert('报名成功！');
             } else {
-              alert(json.message || '报名失败');
+              alert((json && (json.message || json.code)) || '报名失败');
             }
           };
         });
@@ -515,6 +541,9 @@
     // ===== 初始化 =====
     renderAuthChip(null);
     loadCourses();
+
+    // （可选）尝试拿 Cookie 刷新登录状态
+    tryRefresh();
   })();
   </script>
 </body>
