@@ -64,19 +64,24 @@
     .copyright{text-align:center;margin-top:20px;font-size:13px;color:#e4edff}
     @media(max-width:900px){.footer-grid{grid-template-columns:1fr 1fr}.section-wrap{grid-template-columns:1fr}}
 
-    /* Modals */
+    /* General modal */
     .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;z-index:1000}
     .modal{width:min(520px,90vw);background:#fff;border:1px solid #e5e7eb;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:22px}
     .modal h3{margin:0 0 10px;font-size:20px}
     .modal .row{display:flex;gap:10px;margin:10px 0}
-    .modal input{flex:1;padding:10px;border:1px solid #d1d5db;border-radius:10px;font-size:14px}
+    .modal input, .modal textarea, .modal select{flex:1;padding:10px;border:1px solid #d1d5db;border-radius:10px;font-size:14px}
     .modal button{padding:10px 14px;border-radius:10px;border:1px solid #1E3AFF;background:#1E3AFF;color:#fff;font-weight:700;cursor:pointer}
-    .modal .ghost{background:#fff;color:#1E3AFF}
+    .modal .ghost{background:#fff;color:#1E3AFF;border-color:#1E3AFF}
     .modal .msg{font-size:13px;color:#475569;min-height:20px;margin-top:4px}
-    .modal .link{font-size:13px;color:#2563eb;cursor:pointer}
-    .auth-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;color:#0f172a;margin-left:10px}
-    #pwd-req-list li{color:#64748b}
-    #pwd-req-list li.ok{color:#059669;font-weight:600}
+
+    /* Intake only */
+    .modal.intake .desc{color:#475569;font-size:14px;margin-bottom:6px}
+
+    /* Feedback stars */
+    .stars{display:inline-flex;align-items:center;gap:2px;font-size:0}
+    .star{font-size:26px;cursor:pointer;user-select:none;line-height:1}
+    .star.half::after{content:'\2605'; display:inline-block; width:0.5em; overflow:hidden}
+    .hint{font-size:13px;color:#64748b;margin-left:8px}
   </style>
 </head>
 <body>
@@ -102,8 +107,6 @@
       <h1>Practice languages in English & Chinese · 中英双语交流</h1>
       <div class="actions">
         <a class="btn primary" href="#sessions">Join a Session 参加活动</a>
-        <button class="btn outline" id="btn-hero-register">Register 注册</button>
-        <button class="btn outline" id="btn-hero-login">Login 登录</button>
       </div>
     </div>
   </header>
@@ -171,6 +174,28 @@
     </div>
   </section>
 
+  <!-- FEEDBACK -->
+  <section id="feedback">
+    <div class="container surface">
+      <h2 class="section-title"><span class="badge-key">📝</span> Feedback 意见反馈</h2>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div id="star-wrap" class="stars" aria-label="rating">
+            <!-- stars inserted by JS -->
+          </div>
+          <span id="star-hint" class="hint">请选择 1–5 星（可半星）</span>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <textarea id="fb-text" rows="3" placeholder="可选留言 · Optional message"></textarea>
+        </div>
+        <div class="row" style="justify-content:flex-end">
+          <button id="btn-send-feedback">Submit 提交</button>
+        </div>
+        <div class="msg" id="fb-msg"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-grid">
@@ -185,65 +210,20 @@
     <div class="copyright">© <span id="y"></span> InScope. Made with ♥ in Sydney.</div>
   </footer>
 
-  <!-- ===== Auth Modals ===== -->
-  <div id="modal-register" class="modal-overlay" aria-hidden="true">
-    <div class="modal">
-      <h3>Register · 注册</h3>
-      <div id="reg-step-1">
-        <div class="row"><input id="reg-email" type="email" placeholder="Email 邮箱" /></div>
-        <div class="row">
-          <button id="btn-send-code">Send code 发送验证码</button>
-          <button class="ghost" data-close>Cancel 取消</button>
-        </div>
-        <div class="msg" id="reg-msg-1"></div>
+  <!-- ===== Intake Modal (username + email) ===== -->
+  <div id="modal-intake" class="modal-overlay" aria-hidden="true">
+    <div class="modal intake">
+      <h3>Welcome 欢迎 · InScope</h3>
+      <div class="desc">请输入用户名与邮箱后即可使用网站。任何用户名/邮箱均可。<br/>Enter your username & email to continue (no strict rules).</div>
+      <div class="row"><input id="intake-username" placeholder="Username 用户名" /></div>
+      <div class="row"><input id="intake-email" type="email" placeholder="Email 邮箱" /></div>
+      <div class="row" style="justify-content:flex-end">
+        <button id="btn-intake-continue">Continue 继续</button>
       </div>
-      <div id="reg-step-2" style="display:none">
-        <div class="row"><input id="reg-code" inputmode="numeric" maxlength="6" placeholder="6-digit code 六位验证码" /></div>
-        <div class="row">
-          <button id="btn-verify-code">Verify 验证</button>
-          <button class="ghost" data-back>Back 返回</button>
-        </div>
-        <div class="msg" id="reg-msg-2"></div>
-      </div>
-      <div id="reg-step-3" style="display:none">
-        <div class="row"><input id="reg-username" placeholder="Username 用户名" /></div>
-        <div class="row"><input id="reg-password" type="password" placeholder="Password 密码（至少8位，含大小写/数字/符号）" /></div>
-
-        <div class="msg" id="pwd-req" style="line-height:1.4">
-          <div><strong>密码要求 · Password must include:</strong></div>
-          <ul id="pwd-req-list" style="margin:6px 0 0 16px;padding:0;">
-            <li data-req="len">≥ 8 个字符</li>
-            <li data-req="upper">至少 1 个大写字母</li>
-            <li data-req="lower">至少 1 个小写字母</li>
-            <li data-req="digit">至少 1 个数字</li>
-            <li data-req="symbol">至少 1 个符号（!@#$%^&* 等）</li>
-            <li data-req="noemail">不能包含邮箱前缀</li>
-            <li data-req="nouser">不能包含用户名</li>
-          </ul>
-        </div>
-
-        <div class="row">
-          <button id="btn-register" disabled>Create account 创建账号</button>
-          <button class="ghost" data-close>Close 关闭</button>
-        </div>
-        <div class="msg" id="reg-msg-3"></div>
-      </div>
+      <div class="msg" id="intake-msg"></div>
     </div>
   </div>
-
-  <div id="modal-login" class="modal-overlay" aria-hidden="true">
-    <div class="modal">
-      <h3>Login · 登录</h3>
-      <div class="row"><input id="login-email" type="email" placeholder="Email 邮箱" /></div>
-      <div class="row"><input id="login-password" type="password" placeholder="Password 密码" /></div>
-      <div class="row">
-        <button id="btn-login">Login 登录</button>
-        <button class="ghost" data-close>Cancel 取消</button>
-      </div>
-      <div class="msg" id="login-msg"></div>
-    </div>
-  </div>
-  <!-- ===== /Auth Modals ===== -->
+  <!-- ===== /Intake Modal ===== -->
 
   <script>
     document.getElementById('y').textContent = new Date().getFullYear();
@@ -252,298 +232,228 @@
   <!-- ===== Main Script ===== -->
   <script>
   (() => {
-    const API_BASE = 'https://inscope-backend.onrender.com';
+    const API_BASE = 'https://inscope-backend.onrender.com'; // 你现有后端的基址
     const JSON_HEADERS = {'Content-Type':'application/json'};
-    let accessToken = null;
 
+    // ===== Utilities =====
     const $ = (sel, root=document) => root.querySelector(sel);
     const show = el => { el.style.display='flex'; el.setAttribute('aria-hidden','false'); };
     const hide = el => { el.style.display='none'; el.setAttribute('aria-hidden','true'); };
 
-    // ===== API helpers =====
-    async function apiPost(path, body, { withAuth=false, withCookie=false } = {}) {
-      const headers = { ...JSON_HEADERS };
-      if (withAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
-      let res, json;
-      try {
-        res = await fetch(`${API_BASE}${path}`, {
-          method:'POST', headers, body: JSON.stringify(body || {}),
-          credentials: withCookie ? 'include' : 'omit'
-        });
-        json = await res.json().catch(()=>({}));
-      } catch (e) {
-        return { status: 0, json: { ok:false, message:'网络异常或后端暂不可用' } };
-      }
-      return { status: res.status, json };
+    // 用户状态仅存在前端（本地），并尝试发到后端记录
+    function getUser() {
+      try { return JSON.parse(localStorage.getItem('inscope_user') || 'null'); } catch { return null; }
     }
-    async function apiGet(path, { withAuth=false } = {}) {
-      const headers = {};
-      if (withAuth && accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
-      let res, json;
-      try {
-        res = await fetch(`${API_BASE}${path}`, { headers });
-        json = await res.json().catch(()=>({}));
-      } catch (e) {
-        return { status: 0, json: { ok:false, message:'网络异常或后端暂不可用' } };
-      }
-      return { status: res.status, json };
+    function setUser(u) {
+      localStorage.setItem('inscope_user', JSON.stringify(u || null));
     }
 
-    // ===== Hero 按钮绑定（打开模态） =====
-    document.getElementById('btn-hero-register')?.addEventListener('click', e => {
-      e.preventDefault(); show(document.getElementById('modal-register'));
-    });
-    document.getElementById('btn-hero-login')?.addEventListener('click', e => {
-      e.preventDefault(); show(document.getElementById('modal-login'));
-    });
-
-    // ===== 关闭/返回 =====
-    document.querySelectorAll('[data-close]').forEach(el => el.onclick = () => {
-      hide(document.getElementById('modal-register'));
-      hide(document.getElementById('modal-login'));
-      // 重置表单
-      document.getElementById('reg-step-1').style.display='block';
-      document.getElementById('reg-step-2').style.display='none';
-      document.getElementById('reg-step-3').style.display='none';
-      document.getElementById('reg-msg-1').textContent =
-        document.getElementById('reg-msg-2').textContent =
-        document.getElementById('reg-msg-3').textContent = '';
-      document.getElementById('reg-email').value =
-        document.getElementById('reg-code').value =
-        document.getElementById('reg-username').value =
-        document.getElementById('reg-password').value = '';
-      document.getElementById('login-msg').textContent = '';
-    });
-    document.querySelectorAll('[data-back]').forEach(el => el.onclick = () => {
-      document.getElementById('reg-step-2').style.display='none';
-      document.getElementById('reg-step-1').style.display='block';
-      document.getElementById('reg-msg-1').textContent='';
-    });
-
-    // ===== 注册流程 =====
-    let registrationToken = null;
-
-    document.getElementById('btn-send-code').onclick = async () => {
-      const email = document.getElementById('reg-email').value.trim();
-      document.getElementById('reg-msg-1').textContent = '发送中… / Sending…';
-      const { status, json } = await apiPost('/api/v1/auth/request-code', { email });
-      if (status === 200 && json.ok) {
-        document.getElementById('reg-msg-1').textContent = '已发送验证码，请查收。';
-        document.getElementById('reg-step-1').style.display='none';
-        document.getElementById('reg-step-2').style.display='block';
-        document.getElementById('reg-code').focus();
-      } else {
-        document.getElementById('reg-msg-1').textContent = (json && (json.message || json.code)) || '发送失败，请稍后再试。';
-      }
-    };
-
-    document.getElementById('btn-verify-code').onclick = async () => {
-      const email = document.getElementById('reg-email').value.trim();
-      const code  = document.getElementById('reg-code').value.trim();
-      document.getElementById('reg-msg-2').textContent = '验证中… / Verifying…';
-      const { status, json } = await apiPost('/api/v1/auth/verify-code', { email, code });
-      if (status === 200 && json.ok) {
-        registrationToken = json.registration_token;
-        document.getElementById('reg-msg-2').textContent = '验证成功，请设置用户名与密码。';
-        document.getElementById('reg-step-2').style.display='none';
-        document.getElementById('reg-step-3').style.display='block';
-        document.getElementById('reg-username').focus();
-        evaluatePassword(); // 立刻刷新密码校验状态
-      } else {
-        document.getElementById('reg-msg-2').textContent = (json && (json.message || json.code)) || '验证码错误或已过期。';
-      }
-    };
-
-    // ===== 密码规则 & 按钮启用 =====
-    const pwdInput = document.getElementById('reg-password');
-    const userInput = document.getElementById('reg-username');
-    const emailInput = document.getElementById('reg-email');
-    const btnCreate = document.getElementById('btn-register');
-
-    function evaluatePassword() {
-      const pwd = (pwdInput?.value || '');
-      const username = (userInput?.value || '').trim().toLowerCase();
-      const email = (emailInput?.value || '').trim().toLowerCase();
-      const emailPrefix = email.split('@')[0] || '';
-
-      const checks = {
-        len:    pwd.length >= 8,
-        upper:  /[A-Z]/.test(pwd),
-        lower:  /[a-z]/.test(pwd),
-        digit:  /\d/.test(pwd),
-        symbol: /[^A-Za-z0-9]/.test(pwd),
-        noemail: emailPrefix ? !pwd.toLowerCase().includes(emailPrefix) : true,
-        nouser: username ? !pwd.toLowerCase().includes(username) : true,
-      };
-
-      document.querySelectorAll('#pwd-req-list li').forEach(li => {
-        const key = li.getAttribute('data-req');
-        li.classList.toggle('ok', !!checks[key]);
-      });
-
-      const allOk = Object.values(checks).every(Boolean);
-      if (btnCreate) btnCreate.disabled = !allOk;
-    }
-
-    ['input','change'].forEach(evt => {
-      pwdInput?.addEventListener(evt, evaluatePassword);
-      userInput?.addEventListener(evt, evaluatePassword);
-      emailInput?.addEventListener(evt, evaluatePassword);
-    });
-
-    // ===== 创建账号 =====
-    document.getElementById('btn-register').onclick = async () => {
-      const username = document.getElementById('reg-username').value.trim();
-      const password = document.getElementById('reg-password').value;
-      if (!registrationToken) { document.getElementById('reg-msg-3').textContent = '请先完成邮箱验证。'; return; }
-      document.getElementById('reg-msg-3').textContent = '创建中… / Creating…';
-      let res, json;
+    async function safePost(path, body, { withCookie=false } = {}) {
+      // 尝试发送到后端；失败不报错，返回 {ok:false}
       try {
-        res = await fetch(`${API_BASE}/api/v1/auth/register`, {
-          method:'POST',
-          headers: { ...JSON_HEADERS, Authorization: `Bearer ${registrationToken}` },
-          credentials: 'include',
-          body: JSON.stringify({ username, password })
-        });
-        json = await res.json().catch(()=>({}));
-      } catch (e) {
-        document.getElementById('reg-msg-3').textContent = '网络异常，请稍后重试。';
-        return;
-      }
-      if (res.ok && json.ok) {
-        accessToken = json.access_token;
-        document.getElementById('reg-msg-3').textContent = '注册成功！已登录。';
-        renderAuthChip(json.user);
-        setTimeout(() => { hide(document.getElementById('modal-register')); }, 600);
-      } else {
-        document.getElementById('reg-msg-3').textContent = (json && (json.message || json.code)) || '注册失败。';
-      }
-    };
-
-    // ===== 登录 / 刷新 / 登出 =====
-    async function tryRefresh() {
-      let res, data;
-      try {
-        res = await fetch(`${API_BASE}/api/v1/auth/refresh`, {
-          method:'POST',
-          credentials:'include',
-          headers: JSON_HEADERS
-        });
-        data = await res.json().catch(()=>({}));
-      } catch {
-        return false;
-      }
-      if (res.ok && data?.ok) {
-        accessToken = data.access_token;
-        renderAuthChip(data.user);
-        return true;
-      }
-      return false;
-    }
-
-    function renderAuthChip(user) {
-      const plate = document.querySelector('.brand-plate');
-      if (!plate) return;
-
-      const old = document.getElementById('auth-chip');
-      if (old) old.remove();
-
-      const chip = document.createElement('span');
-      chip.id = 'auth-chip';
-      chip.className = 'auth-chip';
-      chip.innerHTML = user
-        ? `👋 ${user.username} <span class="link" id="btn-logout">Logout 退出</span>`
-        : `<span class="link" id="btn-open-login">Login 登录</span> · <span class="link" id="btn-open-register">Register 注册</span>`;
-      plate.insertAdjacentElement('afterend', chip);
-
-      document.getElementById('btn-open-login')?.addEventListener('click', () => show(document.getElementById('modal-login')));
-      document.getElementById('btn-open-register')?.addEventListener('click', () => show(document.getElementById('modal-register')));
-      document.getElementById('btn-logout')?.addEventListener('click', onLogout);
-
-      // Hero 按钮显隐
-      const heroBtnRegister = document.getElementById('btn-hero-register');
-      const heroBtnLogin = document.getElementById('btn-hero-login');
-      if (heroBtnRegister) heroBtnRegister.style.display = user ? 'none' : '';
-      if (heroBtnLogin) heroBtnLogin.style.display = user ? 'none' : '';
-    }
-
-    document.getElementById('btn-login').onclick = async () => {
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value;
-      document.getElementById('login-msg').textContent = '登录中… / Logging in…';
-      let res, json;
-      try {
-        res = await fetch(`${API_BASE}/api/v1/auth/login`, {
+        const res = await fetch(`${API_BASE}${path}`, {
           method:'POST',
           headers: JSON_HEADERS,
-          credentials: 'include',
-          body: JSON.stringify({ email, password })
+          credentials: withCookie ? 'include' : 'omit',
+          body: JSON.stringify(body || {})
         });
-        json = await res.json().catch(()=>({}));
-      } catch (e) {
-        document.getElementById('login-msg').textContent = '网络异常，请稍后重试。';
+        const json = await res.json().catch(()=>({}));
+        return { ok: res.ok, status: res.status, json };
+      } catch {
+        return { ok:false, status:0, json:{ message:'offline' } };
+      }
+    }
+
+    // ===== Intake flow =====
+    const intakeModal = $('#modal-intake');
+    const intakeBtn = $('#btn-intake-continue');
+    const intakeMsg = $('#intake-msg');
+
+    function requireIntake() {
+      const u = getUser();
+      if (!u || !u.username || !u.email) {
+        show(intakeModal);
+      } else {
+        hide(intakeModal);
+      }
+    }
+
+    intakeBtn.addEventListener('click', async () => {
+      const username = $('#intake-username').value.trim();
+      const email = $('#intake-email').value.trim();
+      if (!username || !email) {
+        intakeMsg.textContent = '请填写用户名与邮箱 / Please enter username and email';
         return;
       }
-      if (res.ok && json.ok) {
-        accessToken = json.access_token;
-        document.getElementById('login-msg').textContent = '登录成功！';
-        renderAuthChip(json.user);
-        setTimeout(() => { hide(document.getElementById('modal-login')); }, 400);
-      } else {
-        document.getElementById('login-msg').textContent = (json && (json.message || json.code)) || '登录失败。';
-      }
-    };
+      // 保存到本地
+      const user = { username, email, ts: Date.now() };
+      setUser(user);
 
-    async function onLogout() {
-      await apiPost('/api/v1/auth/logout', {}, { withCookie:true });
-      accessToken = null;
-      renderAuthChip(null);
+      // 尝试通知后端（你后端准备好后接这个接口）
+      // 建议后端提供：POST /api/v1/intake  { username, email }
+      safePost('/api/v1/intake', { username, email });
+
+      hide(intakeModal);
+    });
+
+    // ===== Courses =====
+    const courses = [
+      { id:'c1', title:'Bilingual Exchange · 双语交流（第1期）', date:'2025-10-07', time:'TBD', location:'TBD', max:30 },
+      { id:'c2', title:'Bilingual Exchange · 双语交流（第2期）', date:'2025-10-14', time:'TBD', location:'TBD', max:30 },
+    ];
+
+    function renderCourses() {
+      const grid = $('#courses-grid');
+      grid.innerHTML = '';
+      courses.forEach(course => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h4>${course.title}</h4>
+          <div class="meta">Date 日期: ${course.date}</div>
+          <div class="meta">Time 时间: ${course.time}</div>
+          <div class="meta">Location 地点: ${course.location}</div>
+          <div class="meta">Maxmember 人数上限: ${course.max}</div>
+          <button class="btn primary" data-id="${course.id}">Enroll 报名</button>
+        `;
+        grid.appendChild(card);
+      });
+
+      grid.querySelectorAll('button[data-id]').forEach(btn => {
+        btn.onclick = async () => {
+          const user = getUser();
+          if (!user) { show(intakeModal); return; } // 双重保险：未完成 intake 则先填写
+          const id = btn.getAttribute('data-id');
+
+          // 直接允许报名（无需登录），同时尝试写后端
+          // 建议后端提供：POST /api/v1/courses/{id}/enroll  { username, email }
+          btn.disabled = true;
+          btn.textContent = '已报名';
+          const res = await safePost(`/api/v1/courses/${id}/enroll`, { username:user.username, email:user.email });
+          if (!res.ok) {
+            // 后端未就绪也不影响前端体验
+            // 你要是想提示也可以：alert('报名已记录在前端，后端暂未连接');
+          }
+        };
+      });
     }
 
-    // ===== 课程加载 + 报名 =====
-    async function loadCourses() {
-      const grid = document.getElementById('courses-grid');
-      grid.innerHTML = '<div class="card">Loading… 加载中…</div>';
-      const { json } = await apiGet('/api/v1/courses');
-      if (json.ok && Array.isArray(json.data)) {
-        grid.innerHTML = '';
-        json.data.forEach(course => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <h4>${course.title || '待定活动'}</h4>
-            <div class="meta">Time 时间: TBD</div>
-            <div class="meta">Location 地点: TBD</div>
-            <div class="meta">Maxmember 人数上限: 30</div>
-            <button class="btn primary" data-id="${course.id}">Enroll 报名</button>
-          `;
-          grid.appendChild(card);
-        });
-        grid.querySelectorAll('button[data-id]').forEach(btn => {
-          btn.onclick = async () => {
-            if (!accessToken) { alert('请先登录'); return; }
-            const id = btn.getAttribute('data-id');
-            const { status, json } = await apiPost(`/api/v1/courses/${id}/enroll`, {}, { withAuth:true });
-            if (status === 200 && json.ok) {
-              btn.disabled = true;
-              btn.textContent = '已报名';
-              alert('报名成功！');
-            } else {
-              alert((json && (json.message || json.code)) || '报名失败');
-            }
-          };
-        });
-      } else {
-        grid.innerHTML = '<div class="card">无法加载课程</div>';
+    // ===== Feedback (rating + message) =====
+    const starWrap = $('#star-wrap');
+    const starHint = $('#star-hint');
+    const fbBtn = $('#btn-send-feedback');
+    const fbMsg = $('#fb-msg');
+    const fbText = $('#fb-text');
+
+    // 半星评分：内部以 0.5 递增，range: 1.0 ~ 5.0
+    let rating = 0;
+
+    function buildStars() {
+      // 使用 10 段（半星），点击位置计算到 0.5 粒度
+      // 为简化 UI：显示 5 个大星，但捕获左右半区点击
+      starWrap.innerHTML = '';
+      for (let i=1; i<=5; i++) {
+        const span = document.createElement('span');
+        span.className = 'star';
+        span.textContent = '★';
+        span.dataset.index = String(i);
+        starWrap.appendChild(span);
       }
+
+      function paint(r) {
+        // r: 0 ~ 5，步进0.5
+        const full = Math.floor(r);
+        const half = (r - full) >= 0.5 ? 1 : 0;
+        [...starWrap.children].forEach((s, idx) => {
+          const i = idx + 1;
+          s.style.color = (i <= full) ? '#FFC83D'
+                         : (i === full + 1 && half) ? 'linear-gradient(90deg,#FFC83D 50%,#e5e7eb 50%)'
+                         : '#e5e7eb';
+          s.style.textShadow = (i <= full || (i === full + 1 && half)) ? '0 1px 2px rgba(0,0,0,.15)' : 'none';
+          s.classList.toggle('half', i === full + 1 && half);
+        });
+        starHint.textContent = r ? `评分：${r.toFixed(1)} 星` : '请选择 1–5 星（可半星）';
+      }
+
+      function clickHandler(e) {
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left; // 点击点相对星的左侧
+        const half = x < rect.width / 2 ? 0.5 : 1.0;
+        const idx = Number(e.target.dataset.index);
+        let val = idx - 1 + half;
+        if (val < 1) val = 1; // 至少一星
+        rating = Math.min(5, Math.max(1, val));
+        paint(rating);
+      }
+
+      starWrap.addEventListener('mousemove', (e) => {
+        if (!(e.target instanceof HTMLElement) || !e.target.classList.contains('star')) return;
+        const rect = e.target.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const half = x < rect.width / 2 ? 0.5 : 1.0;
+        const idx = Number(e.target.dataset.index);
+        let hoverVal = idx - 1 + half;
+        if (hoverVal < 1) hoverVal = 1;
+        hoverVal = Math.min(5, Math.max(1, hoverVal));
+        // 临时预览
+        const full = Math.floor(hoverVal);
+        const halfFlag = (hoverVal - full) >= 0.5 ? 1 : 0;
+        [...starWrap.children].forEach((s, i) => {
+          const j = i + 1;
+          s.style.color = (j <= full) ? '#FFC83D'
+                         : (j === full + 1 && halfFlag) ? '#FFC83D' : '#e5e7eb';
+          s.classList.toggle('half', j === full + 1 && halfFlag);
+        });
+        starHint.textContent = `评分：${hoverVal.toFixed(1)} 星`;
+      });
+
+      starWrap.addEventListener('mouseleave', () => paint(rating));
+      starWrap.addEventListener('click', (e) => {
+        if (!(e.target instanceof HTMLElement) || !e.target.classList.contains('star')) return;
+        clickHandler(e);
+      });
+
+      paint(rating);
     }
 
-    // ===== 初始化 =====
-    renderAuthChip(null);
-    loadCourses();
+    fbBtn.addEventListener('click', async () => {
+      const user = getUser();
+      if (!user) { show(intakeModal); return; }
+      if (!rating) {
+        fbMsg.textContent = '请先评分（支持半星）';
+        return;
+      }
+      fbMsg.textContent = '提交中…';
+      const payload = {
+        username: user.username,
+        email: user.email,
+        rating,
+        message: fbText.value.trim() || null,
+        ts: Date.now()
+      };
+      // 建议后端提供：POST /api/v1/feedback { username, email, rating, message }
+      const res = await safePost('/api/v1/feedback', payload);
+      if (res.ok) {
+        fbMsg.textContent = '感谢反馈！Thanks for your feedback!';
+        fbText.value = '';
+      } else {
+        fbMsg.textContent = '已在前端记录，后端暂未连接。稍后自动重试或请刷新后再试。';
+      }
+    });
 
-    // （可选）尝试拿 Cookie 刷新登录状态
-    tryRefresh();
+    // ===== Init =====
+    function init() {
+      // Intake first
+      requireIntake();
+
+      // Courses
+      renderCourses();
+
+      // Feedback stars
+      buildStars();
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
   })();
   </script>
 </body>
