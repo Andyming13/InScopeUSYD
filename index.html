@@ -17,6 +17,8 @@
       --shadow:0 8px 20px rgba(0,0,0,.1);
       --deep-blue:#0b3a7c;
       --muted:#475569;
+      --star:#FFC83D;
+      --star-empty:#e5e7eb;
     }
     body{margin:0;font-family:ui-sans-serif,system-ui;line-height:1.6;background:#f3f6fb}
     a{text-decoration:none}
@@ -78,9 +80,16 @@
     .modal.intake .desc{color:#475569;font-size:14px;margin-bottom:6px}
 
     /* Feedback stars */
-    .stars{display:inline-flex;align-items:center;gap:2px;font-size:0}
-    .star{font-size:26px;cursor:pointer;user-select:none;line-height:1}
-    .star.half::after{content:'\2605'; display:inline-block; width:0.5em; overflow:hidden}
+    .stars{display:inline-flex;align-items:center;gap:6px}
+    .star{position:relative;font-size:26px;line-height:1;user-select:none;cursor:pointer;color:var(--star-empty)}
+    .star.fill{color:var(--star)}
+    .star.half{color:var(--star-empty)}
+    .star.half::before{
+      content:'★';
+      position:absolute;left:0;top:0;
+      width:0.5em;overflow:hidden;
+      color:var(--star);
+    }
     .hint{font-size:13px;color:#64748b;margin-left:8px}
   </style>
 </head>
@@ -180,9 +189,7 @@
       <h2 class="section-title"><span class="badge-key">📝</span> Feedback 意见反馈</h2>
       <div class="card">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <div id="star-wrap" class="stars" aria-label="rating">
-            <!-- stars inserted by JS -->
-          </div>
+          <div id="star-wrap" class="stars" aria-label="rating"></div>
           <span id="star-hint" class="hint">请选择 1–5 星（可半星）</span>
         </div>
         <div class="row" style="margin-top:12px">
@@ -232,7 +239,12 @@
   <!-- ===== Main Script ===== -->
   <script>
   (() => {
-    const API_BASE = 'https://inscope-backend.onrender.com'; // 你现有后端的基址
+    // === API_BASE 优先级：URL ?api= 覆盖 > localStorage.inscope_api_base > 默认值 ===
+    const DEFAULT_API = 'https://inscope-api.onrender.com';
+    const urlApi = new URLSearchParams(location.search).get('api');
+    if (urlApi) localStorage.setItem('inscope_api_base', urlApi);
+    const API_BASE = localStorage.getItem('inscope_api_base') || DEFAULT_API;
+
     const JSON_HEADERS = {'Content-Type':'application/json'};
 
     // ===== Utilities =====
@@ -240,7 +252,6 @@
     const show = el => { el.style.display='flex'; el.setAttribute('aria-hidden','false'); };
     const hide = el => { el.style.display='none'; el.setAttribute('aria-hidden','true'); };
 
-    // 用户状态仅存在前端（本地），并尝试发到后端记录
     function getUser() {
       try { return JSON.parse(localStorage.getItem('inscope_user') || 'null'); } catch { return null; }
     }
@@ -249,7 +260,6 @@
     }
 
     async function safePost(path, body, { withCookie=false } = {}) {
-      // 尝试发送到后端；失败不报错，返回 {ok:false}
       try {
         const res = await fetch(`${API_BASE}${path}`, {
           method:'POST',
@@ -259,7 +269,18 @@
         });
         const json = await res.json().catch(()=>({}));
         return { ok: res.ok, status: res.status, json };
-      } catch {
+      } catch (e) {
+        console.warn('POST failed', path, e);
+        return { ok:false, status:0, json:{ message:'offline' } };
+      }
+    }
+    async function safeGet(path) {
+      try {
+        const res = await fetch(`${API_BASE}${path}`);
+        const json = await res.json().catch(()=>({}));
+        return { ok: res.ok, status: res.status, json };
+      } catch (e) {
+        console.warn('GET failed', path, e);
         return { ok:false, status:0, json:{ message:'offline' } };
       }
     }
@@ -285,12 +306,10 @@
         intakeMsg.textContent = '请填写用户名与邮箱 / Please enter username and email';
         return;
       }
-      // 保存到本地
       const user = { username, email, ts: Date.now() };
       setUser(user);
 
-      // 尝试通知后端（你后端准备好后接这个接口）
-      // 建议后端提供：POST /api/v1/intake  { username, email }
+      // 记录入库（后端会 upsert）
       safePost('/api/v1/intake', { username, email });
 
       hide(intakeModal);
@@ -322,17 +341,14 @@
       grid.querySelectorAll('button[data-id]').forEach(btn => {
         btn.onclick = async () => {
           const user = getUser();
-          if (!user) { show(intakeModal); return; } // 双重保险：未完成 intake 则先填写
+          if (!user) { show(intakeModal); return; }
           const id = btn.getAttribute('data-id');
 
-          // 直接允许报名（无需登录），同时尝试写后端
-          // 建议后端提供：POST /api/v1/courses/{id}/enroll  { username, email }
           btn.disabled = true;
           btn.textContent = '已报名';
           const res = await safePost(`/api/v1/courses/${id}/enroll`, { username:user.username, email:user.email });
           if (!res.ok) {
-            // 后端未就绪也不影响前端体验
-            // 你要是想提示也可以：alert('报名已记录在前端，后端暂未连接');
+            console.warn('enroll failed (kept UX ok):', res.status, res.json);
           }
         };
       });
@@ -345,12 +361,9 @@
     const fbMsg = $('#fb-msg');
     const fbText = $('#fb-text');
 
-    // 半星评分：内部以 0.5 递增，range: 1.0 ~ 5.0
     let rating = 0;
 
     function buildStars() {
-      // 使用 10 段（半星），点击位置计算到 0.5 粒度
-      // 为简化 UI：显示 5 个大星，但捕获左右半区点击
       starWrap.innerHTML = '';
       for (let i=1; i<=5; i++) {
         const span = document.createElement('span');
@@ -361,27 +374,24 @@
       }
 
       function paint(r) {
-        // r: 0 ~ 5，步进0.5
         const full = Math.floor(r);
-        const half = (r - full) >= 0.5 ? 1 : 0;
+        const isHalf = (r - full) >= 0.5;
         [...starWrap.children].forEach((s, idx) => {
           const i = idx + 1;
-          s.style.color = (i <= full) ? '#FFC83D'
-                         : (i === full + 1 && half) ? 'linear-gradient(90deg,#FFC83D 50%,#e5e7eb 50%)'
-                         : '#e5e7eb';
-          s.style.textShadow = (i <= full || (i === full + 1 && half)) ? '0 1px 2px rgba(0,0,0,.15)' : 'none';
-          s.classList.toggle('half', i === full + 1 && half);
+          s.classList.remove('fill','half');
+          if (i <= full) s.classList.add('fill');
+          else if (i === full + 1 && isHalf) s.classList.add('half');
         });
         starHint.textContent = r ? `评分：${r.toFixed(1)} 星` : '请选择 1–5 星（可半星）';
       }
 
       function clickHandler(e) {
         const rect = e.target.getBoundingClientRect();
-        const x = e.clientX - rect.left; // 点击点相对星的左侧
+        const x = e.clientX - rect.left;
         const half = x < rect.width / 2 ? 0.5 : 1.0;
         const idx = Number(e.target.dataset.index);
         let val = idx - 1 + half;
-        if (val < 1) val = 1; // 至少一星
+        if (val < 1) val = 1;
         rating = Math.min(5, Math.max(1, val));
         paint(rating);
       }
@@ -395,14 +405,13 @@
         let hoverVal = idx - 1 + half;
         if (hoverVal < 1) hoverVal = 1;
         hoverVal = Math.min(5, Math.max(1, hoverVal));
-        // 临时预览
         const full = Math.floor(hoverVal);
-        const halfFlag = (hoverVal - full) >= 0.5 ? 1 : 0;
+        const isHalf = (hoverVal - full) >= 0.5;
         [...starWrap.children].forEach((s, i) => {
           const j = i + 1;
-          s.style.color = (j <= full) ? '#FFC83D'
-                         : (j === full + 1 && halfFlag) ? '#FFC83D' : '#e5e7eb';
-          s.classList.toggle('half', j === full + 1 && halfFlag);
+          s.classList.remove('fill','half');
+          if (j <= full) s.classList.add('fill');
+          else if (j === full + 1 && isHalf) s.classList.add('half');
         });
         starHint.textContent = `评分：${hoverVal.toFixed(1)} 星`;
       });
@@ -431,25 +440,23 @@
         message: fbText.value.trim() || null,
         ts: Date.now()
       };
-      // 建议后端提供：POST /api/v1/feedback { username, email, rating, message }
       const res = await safePost('/api/v1/feedback', payload);
       if (res.ok) {
         fbMsg.textContent = '感谢反馈！Thanks for your feedback!';
         fbText.value = '';
       } else {
-        fbMsg.textContent = '已在前端记录，后端暂未连接。稍后自动重试或请刷新后再试。';
+        fbMsg.textContent = '已在前端记录，后端暂未连接。稍后再试或刷新页面。';
       }
     });
 
     // ===== Init =====
-    function init() {
-      // Intake first
+    async function init() {
+      // 开屏健康检查：便于在 Render 日志看到访问
+      const ping = await safeGet('/api/v1/health');
+      console.log('health:', ping);
+
       requireIntake();
-
-      // Courses
       renderCourses();
-
-      // Feedback stars
       buildStars();
     }
 
