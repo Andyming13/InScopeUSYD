@@ -303,10 +303,27 @@
       hide(intakeModal);
     });
 
-    // ===== Courses (静态两场) =====
+    // ===== Courses（已写入具体时间与教室） =====
+    // 只需在这里改时间/房间，即可更新页面展示
     const courses = [
-      { id:'c1', title:'Bilingual Exchange · 双语交流（第1期）', date:'2025-10-07', time:'TBD', location:'TBD', max:30 },
-      { id:'c2', title:'Bilingual Exchange · 双语交流（第2期）', date:'2025-10-14', time:'TBD', location:'TBD', max:30 },
+      {
+        id:'c1',
+        title:'Bilingual Exchange · 双语交流（第1期）',
+        date:'7 Oct 2025',
+        start:'13:30',
+        end:'15:00',
+        room:'H70.01.1160 · Belinda Hutchinson Building · BHB Seminar Room 1160',
+        max:30
+      },
+      {
+        id:'c2',
+        title:'Bilingual Exchange · 双语交流（第2期）',
+        date:'14 Oct 2025',
+        start:'12:00',
+        end:'13:00',
+        room:'F07.03.374 · Carslaw Building · Carslaw Seminar Room 374',
+        max:30
+      },
     ];
 
     function renderCourses() {
@@ -318,8 +335,8 @@
         card.innerHTML = `
           <h4>${course.title}</h4>
           <div class="meta">Date 日期: ${course.date}</div>
-          <div class="meta">Time 时间: ${course.time}</div>
-          <div class="meta">Location 地点: ${course.location}</div>
+          <div class="meta">Time 时间: ${course.start} – ${course.end}</div>
+          <div class="meta">Room 教室: ${course.room}</div>
           <div class="meta">Maxmember 人数上限: ${course.max}</div>
           <button class="btn primary" data-id="${course.id}">Enroll 报名</button>
         `;
