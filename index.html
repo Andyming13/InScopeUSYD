@@ -74,10 +74,6 @@
     .modal .ghost{background:#fff;color:#1E3AFF;border-color:#1E3AFF}
     .modal .msg{font-size:13px;color:#475569;min-height:20px;margin-top:4px}
 
-    /* Intake only */
-    .modal.intake .desc{color:#475569;font-size:14px;margin-bottom:6px}
-
-    /* Feedback stars */
     .stars{display:inline-flex;align-items:center;gap:2px;font-size:0}
     .star{font-size:26px;cursor:pointer;user-select:none;line-height:1}
     .star.half::after{content:'\2605'; display:inline-block; width:0.5em; overflow:hidden}
@@ -92,7 +88,7 @@
       <div class="menu">
         <a href="#sessions">Sessions 活动</a>
         <a href="#how">How It Works 使用方式</a>
-        <a href="#resources">Resources 资源</a>
+        <a href="study.html">Resources 资源</a>
         <a href="#about">About 关于</a>
         <a class="cta" href="#sessions">Join 加入</a>
       </div>
@@ -157,9 +153,8 @@
         <div class="surface">
           <h2 class="section-title"><span class="badge-key">🎹</span> Resources 资源</h2>
           <div class="grid">
-            <div class="card">Resource 1</div>
-            <div class="card">Resource 2</div>
-            <div class="card">Resource 3</div>
+            <!-- 只保留一个可点击链接 -->
+            <a class="card" href="study.html" style="display:block;font-weight:700">学习资源 · Study Materials</a>
           </div>
         </div>
       </div>
@@ -243,13 +238,12 @@
       } catch { return DEFAULT_API; }
     }
     window.API_BASE = getApiBase();
-    console.log('[InScope] API_BASE =', window.API_BASE);
     const tip = document.getElementById('api-tip');
     if (tip) tip.textContent = `· API: ${window.API_BASE}`;
   })();
   </script>
 
-  <!-- ===== Main Script ===== -->
+  <!-- ===== Main Script (保留你原有的功能) ===== -->
   <script>
   (() => {
     const API_BASE = window.API_BASE;
@@ -282,7 +276,7 @@
       } catch (e) { return { ok:false, status:0, json:{ message:'offline' } }; }
     }
 
-    // ===== Intake flow =====
+    // Intake
     const intakeModal = $('#modal-intake');
     const intakeBtn = $('#btn-intake-continue');
     const intakeMsg = $('#intake-msg');
@@ -298,13 +292,11 @@
       if (!username || !email) { intakeMsg.textContent = '请填写用户名与邮箱 / Please enter username and email'; return; }
       const user = { username, email, ts: Date.now() };
       setUser(user);
-      // 记录到后端（后端就绪时会入库）
       safePost('/api/v1/intake', { username, email });
       hide(intakeModal);
     });
 
-    // ===== Courses（已写入具体时间与教室） =====
-    // 只需在这里改时间/房间，即可更新页面展示
+    // Courses
     const courses = [
       {
         id:'c1',
@@ -327,7 +319,7 @@
     ];
 
     function renderCourses() {
-      const grid = $('#courses-grid');
+      const grid = document.querySelector('#courses-grid');
       grid.innerHTML = '';
       courses.forEach(course => {
         const card = document.createElement('div');
@@ -356,12 +348,12 @@
       });
     }
 
-    // ===== Feedback (评分 + 留言) =====
-    const starWrap = $('#star-wrap');
-    const starHint = $('#star-hint');
-    const fbBtn = $('#btn-send-feedback');
-    const fbMsg = $('#fb-msg');
-    const fbText = $('#fb-text');
+    // Feedback
+    const starWrap = document.querySelector('#star-wrap');
+    const starHint = document.querySelector('#star-hint');
+    const fbBtn = document.querySelector('#btn-send-feedback');
+    const fbMsg = document.querySelector('#fb-msg');
+    const fbText = document.querySelector('#fb-text');
 
     let rating = 0;
 
@@ -439,12 +431,10 @@
       else { fbMsg.textContent = '已在前端记录，后端暂未连接。稍后可重试。'; }
     });
 
-    // ===== Init =====
     async function init() {
       requireIntake();
       renderCourses();
       buildStars();
-      // 触发一次健康检查以唤醒后端
       const h = await safeGet('/api/v1/health');
       console.log('[InScope] health:', h.status, h.json);
     }
